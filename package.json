@@ -1,0 +1,19 @@
+{
+  "name": "heliumpay-budget-front",
+  "version": "0.0.1",
+  "description": "Helium Pay budget voting website front-end",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "author": "Krister Viirsaar",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.4",
+    "next": "^3.0.3",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  }
+}
