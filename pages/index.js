@@ -6,7 +6,7 @@ import 'isomorphic-fetch'
 
 export default class extends React.Component {
 	static async getInitialProps () {
-		const res = await fetch('http://localhost:3000/v0/core/dash/gobject/list')
+		const res = await fetch('http://localhost:3000/v0/core/proposals')
 		const json = await res.json()
 		let items = Object.values(json)
 		return {
