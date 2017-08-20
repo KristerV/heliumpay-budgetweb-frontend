@@ -15,9 +15,9 @@ export default class extends React.Component {
 	}
 
 	render () {
+		const header = <p>There are {this.props.proposals.length} proposals in total.</p>
 		return (
-			<Layout>
-				<p>There are {this.props.proposals.length} proposals in total.</p>
+			<Layout header={header}>
 				{this.props.proposals.map(p => {
 					return <Item data={p}/>
 				})}
