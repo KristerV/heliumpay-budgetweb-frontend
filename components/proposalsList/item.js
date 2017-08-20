@@ -8,7 +8,7 @@ export default class extends React.Component {
 		const proposal = JSON.parse(data.DataString)[0][1]
 		const href = `/proposal?hash=${data.Hash}`
 		return (
-			<Link href={href} className="item" id={data.Hash}>
+			<Link href={href}>
 				<a>
 					<p><b>Name</b>: {proposal.name}</p>
 					<p><b>Start date</b>: {proposal.start_epoch}</p>

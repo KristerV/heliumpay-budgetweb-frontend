@@ -18,8 +18,8 @@ export default class extends React.Component {
 		const header = <p>There are {this.props.proposals.length} proposals in total.</p>
 		return (
 			<Layout header={header}>
-				{this.props.proposals.map(p => {
-					return <Item data={p}/>
+				{this.props.proposals.map((p, i) => {
+					return <Item key={i} data={p}/>
 				})}
 			</Layout>
 		)
