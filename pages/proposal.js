@@ -1,11 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
 import Layout from '../components/layout'
+import config from '../config'
 
 export default class extends React.Component {
 	static async getInitialProps (props) {
 		const hash = props.query.hash
-		const res = await fetch('http://localhost:3000/v0/core/proposals/'+hash)
+		const res = await fetch(config.apiUrl+'/v0/core/proposals/'+hash)
 		const json = await res.json()
 		return {
 			proposal: json,

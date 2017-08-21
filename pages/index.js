@@ -2,11 +2,12 @@ import React from 'react'
 import Link from 'next/link'
 import Layout from '../components/layout'
 import Item from '../components/proposalsList/item'
+import config from '../config'
 import 'isomorphic-fetch'
 
 export default class extends React.Component {
 	static async getInitialProps () {
-		const res = await fetch('http://localhost:3000/v0/core/proposals')
+		const res = await fetch(config.apiUrl+'/v0/core/proposals')
 		const json = await res.json()
 		let items = Object.values(json)
 		return {
