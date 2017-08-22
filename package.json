@@ -4,9 +4,9 @@
   "description": "Helium Pay budget voting website front-end",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "next -p 5000",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p 5000"
   },
   "author": "Krister Viirsaar",
   "license": "ISC",
