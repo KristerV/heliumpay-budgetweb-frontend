@@ -4,19 +4,29 @@ import Layout from '../components/layout'
 import Item from '../components/proposalsList/item'
 import config from '../config'
 import 'isomorphic-fetch'
+import 'moment'
 
 export default class extends React.Component {
 	static async getInitialProps () {
-		const res = await fetch(config.apiUrl+'/v0/core/proposals')
-		const json = await res.json()
-		let items = Object.values(json)
+		const proposalsResult = await fetch(config.apiUrl+'/v0/core/proposals')
+		const proposalsJSON = await proposalsResult.json()
+		const proposals = Object.values(proposalsJSON)
+
+		const budgetResult = await fetch(config.apiUrl+'/v0/core/budget')
+		const budget = await budgetResult.json()
+
 		return {
-			proposals: items,
+			proposals,
+			budget
 		}
 	}
 
 	render () {
-		const header = <p>There are {this.props.proposals.length} proposals in total.</p>
+		const budget = this.props.budget
+		const header = <div>
+				<p>There are {this.props.proposals.length} proposals in total.</p>
+				<p>Next payment will be {Math.round(budget.budgetTotal * 100) / 100} {config.ticker} and it will occur in {Math.round(budget.paymentDelay/60/60/24)} days (however there are only {Math.round(budget.voteDeadlineDelay/60/60/24)} days to vote).</p>
+			</div>
 		return (
 			<Layout header={header}>
 				{this.props.proposals.map((p, i) => {

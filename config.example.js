@@ -1,3 +1,4 @@
 module.exports = {
-	apiUrl: "https://api.heliumlabs.org"
+	apiUrl: "https://api.heliumlabs.org",
+	ticker: "DASH"
 }
