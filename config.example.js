@@ -1,3 +1,3 @@
 module.exports = {
-	apiUrl: "http://api.heliumlabs.org"
+	apiUrl: "https://api.heliumlabs.org"
 }
