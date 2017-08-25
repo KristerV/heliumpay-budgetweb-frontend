@@ -8,9 +8,8 @@ import 'moment'
 
 export default class extends React.Component {
 	static async getInitialProps () {
-		const proposalsResult = await fetch(config.apiUrl+'/v0/core/proposals')
-		const proposalsJSON = await proposalsResult.json()
-		const proposals = Object.values(proposalsJSON)
+		const proposalsResult = await fetch(config.apiUrl+'/v0/core/proposals?status=active')
+		const proposals = await proposalsResult.json()
 
 		const budgetResult = await fetch(config.apiUrl+'/v0/core/budget')
 		const budget = await budgetResult.json()
@@ -24,7 +23,7 @@ export default class extends React.Component {
 	render () {
 		const budget = this.props.budget
 		const header = <div>
-				<p>There are {this.props.proposals.length} proposals in total.</p>
+				<p>There are {this.props.proposals.length} active proposals (not counting closed).</p>
 				<p>Next payment will be {Math.round(budget.budgetTotal * 100) / 100} {config.ticker} and it will occur in {Math.round(budget.paymentDelay/60/60/24)} days (however there are only {Math.round(budget.voteDeadlineDelay/60/60/24)} days to vote).</p>
 			</div>
 		return (
