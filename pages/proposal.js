@@ -27,6 +27,7 @@ export default class extends React.Component {
 					<p><b>payment_address</b>: {extraData.payment_address}</p>
 					<p><b>payment_amount</b>: {extraData.payment_amount}</p>
 					<p><b>url</b>: {extraData.url}</p>
+					<p><b>Vote yes</b>: gobject vote-many {proposal.Hash} funding yes </p>
 					<style jsx>{`
 						.item {
 							padding: 0 1em;
