@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import Layout from '../components/layout'
-import config from '../config'
+import Layout from '../../components/layout'
+import config from '../../config'
 
 export default class extends React.Component {
 	static async getInitialProps (props) {
