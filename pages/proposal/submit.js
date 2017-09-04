@@ -15,6 +15,7 @@ export default class extends React.Component {
 			prepCommand: null
 		}
 		this.createPrepareCommand = this.createPrepareCommand.bind(this)
+		this.createSubmitCommand = this.createSubmitCommand.bind(this)
 	}
 
 	createPrepareCommand(e) {
@@ -31,17 +32,32 @@ export default class extends React.Component {
 		proposal.payment_amount = form.payment_amount.value
 		proposal.network = 'testnet'
 
-		let serialized
+		proposal.parenthash = form.parenthash.value
+		proposal.revision = form.revision.value
+		proposal.time = form.time.value
+
+		let dataSerialized
 		try {
-			serialized = proposal.serialize()
+			dataSerialized = proposal.serialize()
 		} catch(e) {
 			this.setState({errorForm1: e.message})
 		}
-		if (!serialized)
+		if (!dataSerialized)
 			return
 
-		const prepCmd = `gobject prepare ${form.parenthash.value} ${form.revision.value} ${form.time.value} ${serialized}`
-		this.setState({prepCommand: prepCmd})
+		const prepCommand = `gobject prepare ${form.parenthash.value} ${form.revision.value} ${form.time.value} ${dataSerialized}`
+		this.setState({prepCommand, proposal, dataSerialized})
+
+	}
+
+	createSubmitCommand(e) {
+		e.preventDefault()
+		const form = e.target
+		const proposal = this.state.proposal
+		const form1 = this.state.form1
+
+		const submitCommand = `gobject submit ${proposal.parenthash} ${proposal.revision} ${proposal.time} ${this.state.dataSerialized} ${form.txid.value}`
+		this.setState({submitCommand})
 
 	}
 
@@ -65,7 +81,7 @@ export default class extends React.Component {
 						<li>Edit additional info <i>(not implemented)</i></li>
 					</ol>
 					<NoScript><p><b>Creating a proposal requires JavaScript. If you don't want to turn it on you'll just have to do it manually.</b></p></NoScript>
-					<h2>Step 1</h2>
+					<h2>Step 1 - insert info</h2>
 					<form onSubmit={this.createPrepareCommand}>
 						<input id="name" placeholder="Proposal name (40char)" defaultValue="temp-name-as87gfAFg2O"/>
 						<input id="url" placeholder="Description URL" defaultValue ="https://heliumlabs.org/proposal/temp-name-as87gfAFg2O"/>
@@ -80,16 +96,16 @@ export default class extends React.Component {
 						<input type="submit"/>
 						<p className="error">{this.state.errorForm1}</p>
 					</form>
-					<h2>Step 2</h2>
-					<form>
+					<h2>Step 2 - pay the fee</h2>
+					<form onSubmit={this.createSubmitCommand}>
 						<p className="copyBox">{this.state.prepCommand}</p>
 						<p>Paste this command into your wallet and bring the resulting transaction ID here. This will pay the 5DASH necessary.</p>
 						<input id="txid" placeholder="Prepare command result"/>
 						<input type="submit"/>
 					</form>
-					<h2>Step 3</h2>
+					<h2>Step 3 - submit to network</h2>
 					<form>
-						<input id="submitcmd" disabled placeholder="submit command"/>
+						<p className="copyBox">{this.state.submitCommand}</p>
 						<p>Now paste this into your wallet. This will submit proposal for voting.</p>
 					</form>
 					<style jsx>{`
