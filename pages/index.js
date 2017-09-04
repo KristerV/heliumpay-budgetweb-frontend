@@ -42,6 +42,7 @@ export default class extends React.Component {
 		const header = <div>
 				<p>There are {this.props.proposals.length} active proposals (not counting closed).</p>
 				<p>Next payment will be {Math.round(budget.budgetTotal * 100) / 100} {config.ticker} and it will occur in {Math.round(budget.paymentDelay/60/60/24)} days (however there are only {Math.round(budget.voteDeadlineDelay/60/60/24)} days to vote).</p>
+				<p><Link href="/proposal/submit"><a>Create proposal</a></Link></p>
 			</div>
 		return (
 			<Layout header={header}>
