@@ -12,7 +12,8 @@ export default class extends React.Component {
 		super(props)
 		this.state = {
 			errorForm1: null,
-			prepCommand: null
+			prepCommand: "Command will appear here",
+			submitCommand: "Command will appear here"
 		}
 		this.createPrepareCommand = this.createPrepareCommand.bind(this)
 		this.createSubmitCommand = this.createSubmitCommand.bind(this)
@@ -72,23 +73,44 @@ export default class extends React.Component {
 		return (
 			<Layout>
 				<div className="item">
-					<ol>
-						<li>Enter information, which will generate the prepare command.</li>
-						<li>Paste the command into the wallet console.</li>
-						<li>Insert transaction key here and wait 15 min</li>
-						<li>Submit proposal command into wallet</li>
-						<li>Claim your proposal <i>(not implemented)</i></li>
-						<li>Edit additional info <i>(not implemented)</i></li>
-					</ol>
+					<h1>Create a proposal</h1>
 					<NoScript><p><b>Creating a proposal requires JavaScript. If you don't want to turn it on you'll just have to do it manually.</b></p></NoScript>
-					<h2>Step 1 - insert info</h2>
+					<h2>Step 1 - Insert info</h2>
 					<form onSubmit={this.createPrepareCommand}>
-						<input id="name" placeholder="Proposal name (40char)" defaultValue="temp-name-as87gfAFg2O"/>
-						<input id="url" placeholder="Description URL" defaultValue ="https://heliumlabs.org/proposal/temp-name-as87gfAFg2O"/>
-						<input id="start_epoch" defaultValue={this.props.startepoch} placeholder="Start epoch"/>
-						<input id="end_epoch" placeholder="End epoch" defaultValue={this.props.endepoch}/>
-						<input id="payment_address" placeholder="Payment Address" defaultValue="yQL9A3NmYgobZ1qx9Ps86LF1qfGHQDAYvU"/>
-						<input id="payment_amount" placeholder="Amount" defaultValue="500"/>
+						<table>
+							<tbody>
+								<tr>
+									<td><label>Proposal title</label></td>
+									<td><input id="name" placeholder="Proposal name (40char)"/></td>
+									<td><i>(40 char max)</i></td>
+								</tr>
+								<tr>
+									<td><label>Link for more info</label></td>
+									<td><input id="url" placeholder="Description URL"/></td>
+									<td><i>(Must include http://)</i></td>
+								</tr>
+								<tr>
+									<td><label>Start datetime</label></td>
+									<td><input id="start_epoch" defaultValue={this.props.startepoch} placeholder="Start epoch"/></td>
+									<td><i>(In unix timestamp)</i></td>
+								</tr>
+								<tr>
+									<td><label>End datetime</label></td>
+									<td><input id="end_epoch" placeholder="End epoch" defaultValue={this.props.endepoch}/></td>
+									<td><i>(In unix timestamp)</i></td>
+								</tr>
+								<tr>
+									<td><label>Payment address (DASH)</label></td>
+									<td><input id="payment_address" placeholder="Payment Address"/></td>
+									<td><i></i></td>
+								</tr>
+								<tr>
+									<td><label>Payment amount (DASH)</label></td>
+									<td><input id="payment_amount" placeholder="Amount"/></td>
+									<td><i></i></td>
+								</tr>
+							</tbody>
+						</table>
 						<input id="type" className="hidden" defaultValue="1"/>
 						<input id="parenthash" className="hidden" defaultValue="0"/>
 						<input id="revision" className="hidden" defaultValue="1"/>
@@ -98,15 +120,18 @@ export default class extends React.Component {
 					</form>
 					<h2>Step 2 - pay the fee</h2>
 					<form onSubmit={this.createSubmitCommand}>
+						<p>Paste this command into your wallet debug console. You need to have 5 DASH on your account.</p>
 						<p className="copyBox">{this.state.prepCommand}</p>
-						<p>Paste this command into your wallet and bring the resulting transaction ID here. This will pay the 5DASH necessary.</p>
+						<p>Paste the resulting transaction ID below.</p>
 						<input id="txid" placeholder="Prepare command result"/>
 						<input type="submit"/>
 					</form>
 					<h2>Step 3 - submit to network</h2>
 					<form>
-						<p className="copyBox">{this.state.submitCommand}</p>
 						<p>Now paste this into your wallet. This will submit proposal for voting.</p>
+						<p className="copyBox">{this.state.submitCommand}</p>
+						<p>You'll need to wait for 6 confirmations before this command will work.</p>
+						<p>Submitting will return the proposal ID. You may keep it for reference, but don't actually need it.</p>
 					</form>
 					<style jsx>{`
 						.item {
@@ -123,6 +148,13 @@ export default class extends React.Component {
 							background-color: rgb(230,230,230);
 							padding: 10px;
 							word-break: break-all;
+						}
+						.column {
+							width: 45%;
+							display: inline-block;
+						}
+						.column > * {
+							height: 35px;
 						}
 					`}</style>
 				</div>
