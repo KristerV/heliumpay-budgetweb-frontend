@@ -7,16 +7,33 @@ import 'isomorphic-fetch'
 import 'moment'
 
 export default class extends React.Component {
+
+	constructor(props) {
+		super(props)
+		this.state = {}
+	}
+
 	static async getInitialProps () {
+		let errors = []
+
 		const proposalsResult = await fetch(config.apiUrl+'/v0/core/proposals?status=active')
-		const proposals = await proposalsResult.json()
+		let proposals = await proposalsResult.json()
+		if (proposalsResult.status !== 200) {
+			errors.push(proposals.message)
+			proposals = []
+		}
 
 		const budgetResult = await fetch(config.apiUrl+'/v0/core/budget')
-		const budget = await budgetResult.json()
+		let budget = await budgetResult.json()
+		if (budgetResult.status !== 200) {
+			errors.push(budget.message)
+			budget = {}
+		}
 
 		return {
 			proposals,
-			budget
+			budget,
+			errors
 		}
 	}
 
@@ -28,9 +45,15 @@ export default class extends React.Component {
 			</div>
 		return (
 			<Layout header={header}>
+				<p className="error">{this.props.errors}</p>
 				{this.props.proposals.map((p, i) => {
 					return <Item key={i} data={p}/>
 				})}
+				<style jsx>{`
+					.error {
+						color: red;
+					}
+				`}</style>
 			</Layout>
 		)
 	}
