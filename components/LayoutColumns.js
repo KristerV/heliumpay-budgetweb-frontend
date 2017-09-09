@@ -1,11 +1,19 @@
 import React from 'react'
+import Link from 'next/link'
 
 export default class extends React.Component {
 	render() {
+		const columns = this.props.columns || []
 		return (
 			<div className="outer">
 				<div className="inner">
-					{this.props.columns.map((c, i) => {
+					<div className="column">
+						<ul>
+							<li><Link href="/"><a>Proposals</a></Link></li>
+							<li><Link href="/submit"><a>Create proposal</a></Link></li>
+						</ul>
+					</div>
+					{columns.map((c, i) => {
 						return <div className="column" key={i}>
 							{c}
 						</div>

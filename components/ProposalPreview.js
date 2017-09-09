@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Paper from './Paper'
 
 export default class extends React.Component {
 
@@ -10,23 +11,23 @@ export default class extends React.Component {
 		return (
 			<Link href={href}>
 				<a>
-					<div className="container">
-						<div>
-							<h1>{data.AbsoluteYesCount}</h1>
+					<Paper>
+						<div className="container">
+							<div>
+								<h1>{data.AbsoluteYesCount}</h1>
+							</div>
+							<div>
+								<p>{proposal.name}</p>
+							</div>
+							<div>
+								<h2>{Math.round(proposal.payment_amount*100)/100}</h2><p>DASH</p>
+							</div>
 						</div>
-						<div>
-							<p>{proposal.name}</p>
-						</div>
-						<div>
-							<h2>{Math.round(proposal.payment_amount*100)/100}</h2><p>DASH</p>
-						</div>
-					</div>
+					</Paper>
 					<style jsx>{`
 						a {
 							width: 100%;
 							display: inline-block;
-							padding: 0 1em;
-							box-sizing: border-box;
 							color: inherit;
 							text-decoration: inherit;
 						}

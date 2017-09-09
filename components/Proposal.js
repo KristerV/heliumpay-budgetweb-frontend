@@ -6,6 +6,8 @@ export default class extends React.Component {
 
 	render () {
 		const proposal = this.props.proposal
+		if (!proposal || !Object.keys(proposal).length)
+			return <div>Selected proposal will display here</div>
 		const extraData = JSON.parse(proposal.DataString)[0][1]
 		return (
 			<Paper>
