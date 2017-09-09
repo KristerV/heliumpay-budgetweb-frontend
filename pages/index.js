@@ -8,6 +8,7 @@ import 'moment'
 
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
+import Proposal from '../components/proposal'
 
 export default class extends React.Component {
 
@@ -16,7 +17,7 @@ export default class extends React.Component {
 		this.state = {}
 	}
 
-	static async getInitialProps () {
+	static async getInitialProps (props) {
 		let errors = []
 
 		const proposalsResult = await fetch(config.apiUrl+'/v0/core/proposals?status=active')
@@ -33,16 +34,24 @@ export default class extends React.Component {
 			budget = {}
 		}
 
+		const proposalResult = await fetch(config.apiUrl+'/v0/core/proposals/'+props.query.proposal)
+		let proposal = await proposalResult.json()
+		if (proposalResult.status !== 200) {
+			errors.push(proposal.message)
+			proposal = {}
+		}
+
 		return {
 			proposals,
 			budget,
+			proposal,
 			errors
 		}
 	}
 
 	render () {
 		const budget = this.props.budget
-		const header = <div>
+		const header = <div key="sdf689asdf">
 				<p>There are {this.props.proposals.length} active proposals (not counting closed).</p>
 				<p>Next payment will be {Math.round(budget.budgetTotal * 100) / 100} {config.ticker} and it will occur in {Math.round(budget.paymentDelay/60/60/24)} days (however there are only {Math.round(budget.voteDeadlineDelay/60/60/24)} days to vote).</p>
 				<p><Link href="/proposal/submit"><a>Create proposal</a></Link></p>
@@ -61,6 +70,7 @@ export default class extends React.Component {
 		return (
 			<LayoutColumns columns={columns}>
 				<p className="error">{this.props.errors}</p>
+				<Proposal proposal={this.props.proposal}/>
 				<style jsx>{`
 					.error {
 						color: red;

@@ -6,7 +6,7 @@ export default class extends React.Component {
 	render () {
 		const data = this.props.data
 		const proposal = JSON.parse(data.DataString)[0][1]
-		const href = `/proposal?hash=${data.Hash}`
+		const href = `?proposal=${data.Hash}`
 		return (
 			<Link href={href}>
 				<a>

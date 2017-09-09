@@ -5,8 +5,8 @@ export default class extends React.Component {
 		return (
 			<div className="outer">
 				<div className="inner">
-					{this.props.columns.map(c => {
-						return <div className="column">
+					{this.props.columns.map((c, i) => {
+						return <div className="column" key={i}>
 							{c}
 						</div>
 					})}

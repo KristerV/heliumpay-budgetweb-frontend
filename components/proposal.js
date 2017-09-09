@@ -1,23 +1,14 @@
 import React from 'react'
 import Link from 'next/link'
-import Layout from '../../components/layout'
-import config from '../../config'
+import Paper from './Paper'
 
 export default class extends React.Component {
-	static async getInitialProps (props) {
-		const hash = props.query.hash
-		const res = await fetch(config.apiUrl+'/v0/core/proposals/'+hash)
-		const json = await res.json()
-		return {
-			proposal: json,
-		}
-	}
 
 	render () {
 		const proposal = this.props.proposal
 		const extraData = JSON.parse(proposal.DataString)[0][1]
 		return (
-			<Layout>
+			<Paper>
 				<div className="item">
 					<p><b>Hash</b>: {proposal.Hash}</p>
 					<p><b>FundingResult</b>: {JSON.stringify(proposal.FundingResult)}</p>
@@ -34,7 +25,7 @@ export default class extends React.Component {
 						}
 					`}</style>
 				</div>
-			</Layout>
+			</Paper>
 		)
 	}
 }
