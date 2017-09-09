@@ -37,7 +37,7 @@ export default class extends React.Component {
 						min-width: 10em;
 					}
 					.column:nth-child(2) {
-						width: 40em;
+						width: 50em;
 					}
 				`}</style>
 			</div>

@@ -57,6 +57,7 @@ export default class extends React.Component {
 					<Item data={p}/>
 				</Paper>)
 		]
+		columns[1].unshift(header)
 		return (
 			<LayoutColumns columns={columns}>
 				<p className="error">{this.props.errors}</p>

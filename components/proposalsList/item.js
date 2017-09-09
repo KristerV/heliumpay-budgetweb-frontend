@@ -10,26 +10,39 @@ export default class extends React.Component {
 		return (
 			<Link href={href}>
 				<a>
-					<p><b>Name</b>: {proposal.name}</p>
-					<p><b>Start date</b>: {proposal.start_epoch}</p>
-					<p><b>Amount</b>: {proposal.payment_amount} DASH</p>
-					<p><b>Discussion</b>: {proposal.url}</p>
-					<p><b>Votes</b>: {data.AbsoluteYesCount} (+{data.YesCount} -{data.NoCount} /{this.props.data.AbstainCount})</p>
+					<div className="container">
+						<div>
+							<h1>{data.AbsoluteYesCount}</h1>
+						</div>
+						<div>
+							<p>{proposal.name}</p>
+						</div>
+						<div>
+							<h2>{Math.round(proposal.payment_amount*100)/100}</h2><p>DASH</p>
+						</div>
+					</div>
 					<style jsx>{`
 						a {
 							width: 100%;
 							display: inline-block;
-							border-bottom: 1px solid rgba(0,0,0,0.3);
 							padding: 0 1em;
 							box-sizing: border-box;
 							color: inherit;
 							text-decoration: inherit;
 						}
-						a:hover {
-							background-color: rgba(100,100,100,0.1);
+						.container {
+							display: flex;
 						}
-						.hidden {
-							display: none;
+						.container > div:nth-child(1) {
+							flex-basis: 7em;
+						}
+						.container > div:nth-child(2) {
+							flex-basis: 100%;
+							word-break: break-all;
+						}
+						.container > div:nth-child(3) {
+							flex-basis: 7em;
+							text-align: center;
 						}
 					`}</style>
 				</a>
