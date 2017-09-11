@@ -1,3 +1,4 @@
+import config from '../config'
 import React from 'react'
 import Link from 'next/link'
 import Paper from './Paper'
@@ -9,21 +10,30 @@ export default class extends React.Component {
 		if (!proposal || !Object.keys(proposal).length)
 			return <div>Selected proposal will display here</div>
 		const extraData = JSON.parse(proposal.DataString)[0][1]
+		console.log(proposal, extraData)
+		const startDate = (new Date(extraData.start_epoch*1000)).toISOString().slice(0,10)
+		const endDate = (new Date(extraData.end_epoch*1000)).toISOString().slice(0,10)
 		return (
 			<Paper>
 				<div className="item">
-					<p><b>Hash</b>: {proposal.Hash}</p>
-					<p><b>FundingResult</b>: {JSON.stringify(proposal.FundingResult)}</p>
-					<p><b>start_epoch</b>: {extraData.start_epoch}</p>
-					<p><b>end_epoch</b>: {extraData.end_epoch}</p>
-					<p><b>name</b>: {extraData.name}</p>
-					<p><b>payment_address</b>: {extraData.payment_address}</p>
-					<p><b>payment_amount</b>: {extraData.payment_amount}</p>
-					<p><b>url</b>: {extraData.url}</p>
+					<h2>{extraData.name}</h2>
+					<div className="inline">
+						<h3>{proposal.FundingResult.AbsoluteYesCount} votes</h3>
+						<p>Yes: {proposal.FundingResult.YesCount}</p>
+						<p>No: {proposal.FundingResult.NoCount}</p>
+						<p>Abstain: {proposal.FundingResult.AbstainCount}</p>
+					</div>
+					<h3>{extraData.payment_amount} {config.ticker}</h3>
+					<p>Starting {startDate}</p>
+					<a target="_blank" href={extraData.url}>More info</a>
 					<p><b>Vote yes</b>: gobject vote-many {proposal.Hash} funding yes </p>
 					<style jsx>{`
 						.item {
 							padding: 0 1em;
+						}
+						.inline > h1, .inline > h2, .inline > h3, .inline > p {
+							display: inline;
+							margin-right: 0.7em;
 						}
 					`}</style>
 				</div>
