@@ -10,7 +10,6 @@ export default class extends React.Component {
 		if (!proposal || !Object.keys(proposal).length)
 			return <div>Selected proposal will display here</div>
 		const extraData = JSON.parse(proposal.DataString)[0][1]
-		console.log(proposal, extraData)
 		const startDate = (new Date(extraData.start_epoch*1000)).toISOString().slice(0,10)
 		const endDate = (new Date(extraData.end_epoch*1000)).toISOString().slice(0,10)
 		return (
