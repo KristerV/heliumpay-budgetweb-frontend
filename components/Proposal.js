@@ -7,8 +7,6 @@ export default class extends React.Component {
 
 	render () {
 		const proposal = this.props.proposal
-		if (!proposal || !Object.keys(proposal).length)
-			return <div>Selected proposal will display here</div>
 		const extraData = JSON.parse(proposal.DataString)[0][1]
 		const startDate = (new Date(extraData.start_epoch*1000)).toISOString().slice(0,10)
 		const endDate = (new Date(extraData.end_epoch*1000)).toISOString().slice(0,10)
@@ -29,6 +27,7 @@ export default class extends React.Component {
 					<style jsx>{`
 						.item {
 							padding: 0 1em;
+							word-break: break-all;
 						}
 						.inline > h1, .inline > h2, .inline > h3, .inline > p {
 							display: inline;
