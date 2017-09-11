@@ -9,6 +9,7 @@ export default (props) => (
 				margin: 0.5em 0;
 				padding: 1em;
 				box-sizing: border-box;
+				border-radius: 3px;
 			}
 		`}</style>
 	</div>

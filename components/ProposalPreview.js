@@ -18,9 +18,7 @@ export default class extends React.Component {
 							</div>
 							<div>
 								<p>{proposal.name}</p>
-							</div>
-							<div>
-								<h2>{Math.round(proposal.payment_amount*100)/100}</h2><p>DASH</p>
+								<p className="light">{Math.round(proposal.payment_amount*100)/100} DASH</p>
 							</div>
 						</div>
 					</Paper>
@@ -30,12 +28,21 @@ export default class extends React.Component {
 							display: inline-block;
 							color: inherit;
 							text-decoration: inherit;
+							border-radius: 5px;
+						}
+						p {
+							margin: 0.5em 0;
+						}
+						p.light {
+							color: rgba(0,0,0,0.7);
 						}
 						.container {
 							display: flex;
 						}
 						.container > div:nth-child(1) {
-							flex-basis: 7em;
+							flex-basis: 4em;
+							text-align: right;
+							margin-right: 1em;
 						}
 						.container > div:nth-child(2) {
 							flex-basis: 100%;
