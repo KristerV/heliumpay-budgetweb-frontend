@@ -3,8 +3,8 @@ import Link from 'next/link'
 export default (props) => (
 	<div className="container">
 		<ul>
-			<li><Link href="/"><a>Proposals</a></Link></li>
-			<li><Link href="/submit"><a>Create proposal</a></Link></li>
+			<li><Link href="/" prefetch><a>Proposals</a></Link></li>
+			<li><Link href="/submit" prefetch><a>Create proposal</a></Link></li>
 		</ul>
 		<style jsx>{`
 			.container {
