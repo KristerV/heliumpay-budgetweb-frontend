@@ -1,5 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
+import DefaultStyle from './DefaultStyle'
+import Menu from './Menu'
 
 export default class extends React.Component {
 	render() {
@@ -12,10 +14,7 @@ export default class extends React.Component {
 				<div className="inner">
 
 					<div className="column">
-						<ul>
-							<li><Link href="/"><a>Proposals</a></Link></li>
-							<li><Link href="/submit"><a>Create proposal</a></Link></li>
-						</ul>
+						<Menu/>
 					</div>
 
 					{this.props.middleColumn ? 
@@ -32,6 +31,7 @@ export default class extends React.Component {
 					: null}
 
 				</div>
+				<DefaultStyle/>
 				<style jsx>{`
 					.outer {
 						width: 100%;
@@ -47,11 +47,8 @@ export default class extends React.Component {
 					.column {
 						padding: 1em 0.3em;
 					}
-					.column:nth-child(1) {
-						min-width: 10em;
-					}
 					.column:nth-child(2) {
-						width: 50em;
+						max-width: 50em;
 					}
 					.column:nth-child(3) {
 						width: 100%;
