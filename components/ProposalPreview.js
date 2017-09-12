@@ -29,6 +29,7 @@ export default class extends React.Component {
 							color: inherit;
 							text-decoration: inherit;
 							border-radius: 5px;
+							box-sizing: border-box;
 						}
 						p {
 							margin: 0.5em 0;

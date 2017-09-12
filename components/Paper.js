@@ -1,8 +1,8 @@
 export default (props) => (
-	<div className="item">
+	<div className="paper">
 		{props.children}
 		<style jsx>{`
-			.item {
+			.paper {
 				width: 100%;
 				background-color: white;
 				box-shadow: 1px 3px 5px rgba(0,0,0,0.3);

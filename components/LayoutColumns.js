@@ -52,6 +52,7 @@ export default class extends React.Component {
 					}
 					.column {
 						padding: 1em 0.3em;
+						box-sizing: border-box;
 					}
 					.column:nth-child(2) {
 						max-width: 50em;

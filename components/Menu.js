@@ -20,6 +20,7 @@ export default (props) => (
 				font-size: 1.1em;
 			}
 			a {
+				text-transform: capitalize;
 				color: inherit;
 				text-decoration: inherit;
 				white-space: nowrap;
