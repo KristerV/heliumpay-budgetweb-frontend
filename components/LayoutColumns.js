@@ -6,9 +6,15 @@ import Menu from './Menu'
 export default class extends React.Component {
 	render() {
 		let isChildren = false
-		this.props.children.forEach(c => {
-			isChildren = isChildren || !!c
-		})
+		if (this.props.children) {
+			if (this.props.children.hasOwnProperty("props"))
+				isChildren = true
+			else {
+				this.props.children.forEach(c => {
+					isChildren = isChildren || !!c
+				})
+			}
+		}
 		return (
 			<div className="outer">
 				<div className="inner">
