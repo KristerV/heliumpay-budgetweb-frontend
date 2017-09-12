@@ -14,7 +14,7 @@ export default class extends React.Component {
 					<Paper>
 						<div className="container">
 							<div>
-								<h1>{data.AbsoluteYesCount}</h1>
+								<h1 className={data.isGettingFunded ? 'green' : 'red'}>{data.AbsoluteYesCount}</h1>
 							</div>
 							<div>
 								<p>{proposal.name}</p>
@@ -36,6 +36,12 @@ export default class extends React.Component {
 						}
 						p.light {
 							color: rgba(0,0,0,0.7);
+						}
+						.green {
+							color: green;
+						}
+						.red {
+							color: red;
 						}
 						.container {
 							display: flex;

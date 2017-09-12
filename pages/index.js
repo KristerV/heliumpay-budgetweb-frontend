@@ -54,6 +54,7 @@ export default class extends React.Component {
 		const header = <div key="sdf689asdf">
 				<p>There are {this.props.proposals.length} active proposals (not counting closed).</p>
 				<p>Next payment will be {Math.round(budget.budgetTotal * 100) / 100} {config.ticker} and it will occur in {Math.round(budget.paymentDelay/60/60/24)} days (however there are only {Math.round(budget.voteDeadlineDelay/60/60/24)} days to vote).</p>
+				<p>To get funded a proposal must get 10% ({Math.round(budget.masternodeCount*0.1)}) of absolute 'yes' votes from the total {budget.masternodeCount} nodes. It must also fit into the budget.</p>
 			</div>
 		const column = this.props.proposals.map((p, i) => <ProposalPreview data={p} key={i}/>)
 		column.unshift(header)
