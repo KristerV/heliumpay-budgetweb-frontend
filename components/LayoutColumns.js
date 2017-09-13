@@ -17,6 +17,7 @@ export default class extends React.Component {
 		}
 		return (
 			<div className="outer">
+				<DefaultStyle/>
 				<div className="inner">
 
 					{isChildren ?
@@ -42,7 +43,6 @@ export default class extends React.Component {
 					</div>
 
 				</div>
-				<DefaultStyle/>
 				<style jsx>{`
 					.outer {
 						width: 100%;
@@ -73,12 +73,14 @@ export default class extends React.Component {
 						display: none;
 						color: black;
 					}
-					@media (max-width: 600px) {
+					@media screen and (orientation:portrait), screen and (max-width: 1200px) {
 						.inner {
 							flex-direction: column;
 						}
 						.column {
 							width: 100% !important;
+							max-width: 900px;
+							margin: auto;
 						}
 						.desktop-hidden {
 							display: block;
