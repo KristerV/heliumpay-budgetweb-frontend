@@ -1,4 +1,8 @@
 module.exports = {
 	apiUrl: "https://api.heliumlabs.org",
-	ticker: "DASH"
+	ticker: "HLM",
+	cliName: "helium-cli",
+	site: {
+		title: "Heliumlabs"
+	}
 }

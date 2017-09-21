@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Paper from './Paper'
+import config from '../config'
 
 export default class extends React.Component {
 
@@ -18,7 +19,7 @@ export default class extends React.Component {
 							</div>
 							<div>
 								<p>{proposal.name}</p>
-								<p className="light">{Math.round(proposal.payment_amount*100)/100} DASH</p>
+								<p className="light">{Math.round(proposal.payment_amount*100)/100} {config.ticker}</p>
 							</div>
 						</div>
 					</Paper>

@@ -4,6 +4,7 @@ import config from '../config'
 import moment from 'moment'
 import Bitcore from 'bitcore-lib-dash'
 import NoScript from 'react-noscript'
+import config from '../config'
 
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
@@ -104,12 +105,12 @@ export default class extends React.Component {
 										<td><i>(In unix timestamp)</i></td>
 									</tr>
 									<tr>
-										<td><label>Payment address (DASH)</label></td>
+										<td><label>Payment address ({config.ticker})</label></td>
 										<td><input id="payment_address" placeholder="Payment Address"/></td>
 										<td><i></i></td>
 									</tr>
 									<tr>
-										<td><label>Payment amount (DASH)</label></td>
+										<td><label>Payment amount ({config.ticker})</label></td>
 										<td><input id="payment_amount" placeholder="Amount"/></td>
 										<td><i></i></td>
 									</tr>
@@ -126,7 +127,7 @@ export default class extends React.Component {
 					<Paper>
 						<h2>Step 2 - pay the fee</h2>
 						<form onSubmit={this.createSubmitCommand}>
-							<p>Paste this command into your wallet debug console. You need to have 5 DASH on your account.</p>
+							<p>Paste this command into your wallet debug console. You need to have 5 {config.ticker} on your account.</p>
 							<p className="copyBox">{this.state.prepCommand}</p>
 							<p>Paste the resulting transaction ID below.</p>
 							<input id="txid" placeholder="Prepare command result"/>
