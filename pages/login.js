@@ -85,7 +85,7 @@ export default class extends React.Component {
           </form>
           <br />
           <small>
-            Don't have an account?&nbsp;
+            Don&apos;t have an account?&nbsp;
             <a href="#" onClick={this.setView(views.register)}>Register</a>
           </small>
         </Paper>
