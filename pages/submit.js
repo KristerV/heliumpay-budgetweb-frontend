@@ -4,7 +4,6 @@ import config from '../config'
 import moment from 'moment'
 import Bitcore from 'bitcore-lib-dash'
 import NoScript from 'react-noscript'
-import config from '../config'
 
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
