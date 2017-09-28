@@ -5,11 +5,14 @@ import moment from 'moment'
 import Bitcore from 'bitcore-lib-dash'
 import NoScript from 'react-noscript'
 
+import config from '../config'
+import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
 
-export default class extends React.Component {
+const client = new ApiClient(config.apiUrl)
 
+export default class extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -42,14 +45,14 @@ export default class extends React.Component {
 		let dataSerialized
 		try {
 			dataSerialized = proposal.serialize()
-		} catch(e) {
-			this.setState({errorForm1: e.message})
+		} catch (e) {
+			this.setState({ errorForm1: e.message })
 		}
 		if (!dataSerialized)
 			return
 
 		const prepCommand = `gobject prepare ${form.parenthash.value} ${form.revision.value} ${form.time.value} ${dataSerialized}`
-		this.setState({prepCommand, proposal, dataSerialized})
+		this.setState({ prepCommand, proposal, dataSerialized })
 
 	}
 
@@ -60,20 +63,20 @@ export default class extends React.Component {
 		const form1 = this.state.form1
 
 		const submitCommand = `gobject submit ${proposal.parenthash} ${proposal.revision} ${proposal.time} ${this.state.dataSerialized} ${form.txid.value}`
-		this.setState({submitCommand})
+		this.setState({ submitCommand })
 
 	}
 
-	static async getInitialProps({req}) {
+	static async getInitialProps({ req }) {
 		return {
 			startepoch: moment().unix(),
 			endepoch: moment().add(2, 'months').unix(),
 		}
 	}
 
-	render () {
+	render() {
 		return (
-			<LayoutColumns>
+			<LayoutColumns isLoggedIn={client.isLoggedIn()}>
 				<div className="item">
 					<h1>Create a proposal</h1>
 					<NoScript><p><b>Creating a proposal requires JavaScript. If you don't want to turn it on you'll just have to do it manually.</b></p></NoScript>
@@ -85,41 +88,41 @@ export default class extends React.Component {
 								<tbody>
 									<tr>
 										<td><label>Proposal title</label></td>
-										<td><input id="name" placeholder="Proposal name (40char)"/></td>
+										<td><input id="name" placeholder="Proposal name (40char)" /></td>
 										<td><i>(40 char max)</i></td>
 									</tr>
 									<tr>
 										<td><label>Link for more info</label></td>
-										<td><input id="url" placeholder="Description URL"/></td>
+										<td><input id="url" placeholder="Description URL" /></td>
 										<td><i>(Must include http://)</i></td>
 									</tr>
 									<tr>
 										<td><label>Start datetime</label></td>
-										<td><input id="start_epoch" defaultValue={this.props.startepoch} placeholder="Start epoch"/></td>
+										<td><input id="start_epoch" defaultValue={this.props.startepoch} placeholder="Start epoch" /></td>
 										<td><i>(In unix timestamp)</i></td>
 									</tr>
 									<tr>
 										<td><label>End datetime</label></td>
-										<td><input id="end_epoch" placeholder="End epoch" defaultValue={this.props.endepoch}/></td>
+										<td><input id="end_epoch" placeholder="End epoch" defaultValue={this.props.endepoch} /></td>
 										<td><i>(In unix timestamp)</i></td>
 									</tr>
 									<tr>
 										<td><label>Payment address ({config.ticker})</label></td>
-										<td><input id="payment_address" placeholder="Payment Address"/></td>
+										<td><input id="payment_address" placeholder="Payment Address" /></td>
 										<td><i></i></td>
 									</tr>
 									<tr>
 										<td><label>Payment amount ({config.ticker})</label></td>
-										<td><input id="payment_amount" placeholder="Amount"/></td>
+										<td><input id="payment_amount" placeholder="Amount" /></td>
 										<td><i></i></td>
 									</tr>
 								</tbody>
 							</table>
-							<input id="type" className="hidden" defaultValue="1"/>
-							<input id="parenthash" className="hidden" defaultValue="0"/>
-							<input id="revision" className="hidden" defaultValue="1"/>
-							<input id="time" className="hidden" defaultValue={this.props.startepoch}/>
-							<input type="submit"/>
+							<input id="type" className="hidden" defaultValue="1" />
+							<input id="parenthash" className="hidden" defaultValue="0" />
+							<input id="revision" className="hidden" defaultValue="1" />
+							<input id="time" className="hidden" defaultValue={this.props.startepoch} />
+							<input type="submit" />
 							<p className="error">{this.state.errorForm1}</p>
 						</form>
 					</Paper>
@@ -129,8 +132,8 @@ export default class extends React.Component {
 							<p>Paste this command into your wallet debug console. You need to have 5 {config.ticker} on your account.</p>
 							<p className="copyBox">{this.state.prepCommand}</p>
 							<p>Paste the resulting transaction ID below.</p>
-							<input id="txid" placeholder="Prepare command result"/>
-							<input type="submit"/>
+							<input id="txid" placeholder="Prepare command result" />
+							<input type="submit" />
 						</form>
 					</Paper>
 					<Paper>

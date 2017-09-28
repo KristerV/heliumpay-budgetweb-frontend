@@ -17,7 +17,7 @@ export default class extends React.Component {
 		}
 		return (
 			<div className="outer">
-				<DefaultStyle/>
+				<DefaultStyle />
 				<div className="inner">
 
 					{isChildren ?
@@ -29,17 +29,17 @@ export default class extends React.Component {
 							}
 							{this.props.children}
 						</div>
-					: null}
+						: null}
 
-					{this.props.middleColumn ? 
+					{this.props.middleColumn ?
 						<div className="column second">
 							<Link href="/menu" prefetch><a className="desktop-hidden">&lt; MENU</a></Link>
 							{this.props.middleColumn}
 						</div>
-					: null}
+						: null}
 
 					<div className="column first">
-						<Menu/>
+						<Menu isLoggedIn={this.props.isLoggedIn} />
 					</div>
 
 				</div>

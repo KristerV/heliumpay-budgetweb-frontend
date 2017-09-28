@@ -5,7 +5,10 @@ export default (props) => (
 		<ul>
 			<li><Link href="/" prefetch><a>Proposals</a></Link></li>
 			<li><Link href="/submit" prefetch><a>Create proposal</a></Link></li>
-			<li><Link href="/login" prefetch><a>Login / Register</a></Link></li>
+			{props.isLoggedIn
+				? <li><a>Logout</a></li>
+				: <li><Link href="/login" prefetch><a>Login / Register</a></Link></li>
+			}
 		</ul>
 		<style jsx>{`
 			.container {

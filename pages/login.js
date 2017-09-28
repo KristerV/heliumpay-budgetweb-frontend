@@ -1,13 +1,16 @@
 import React from 'react'
 import Link from 'next/link'
-import config from '../config'
+import router from 'next/router'
 import moment from 'moment'
 import Bitcore from 'bitcore-lib-dash'
 import NoScript from 'react-noscript'
-
+import config from '../config'
+import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
+import Alert from '../components/Alert'
 
+const client = new ApiClient(config.apiUrl)
 const views = {
   login: 'login',
   register: 'register',
@@ -32,18 +35,35 @@ export default class extends React.Component {
     this.setState({ view })
   }
 
-  register = e => {
+  register = async e => {
     e.preventDefault();
     const { username, password, confirmPassword, email } = this.state
+    this.setState({ error: null })
 
-    console.log('regiser', { username, password, confirmPassword, email })
+    if (password !== confirmPassword) {
+      this.setState({ error: 'passwords do not match' })
+    } else {
+      try {
+        await client.register({ username, password, email })
+        await client.login(username, password)
+        router.push('/')
+      } catch (error) {
+        this.setState({ error: error.message })
+      }
+    }
   }
 
-  login = e => {
+  login = async e => {
     e.preventDefault();
     const { username, password } = this.state
+    this.setState({ error: null })
 
-    console.log('login', { username, password })
+    try {
+      await client.login(username, password)
+      router.push('/')
+    } catch (error) {
+      this.setState({ error: error.message })
+    }
   }
 
   sendPasswordReset = e => {
@@ -54,7 +74,7 @@ export default class extends React.Component {
   }
 
   renderLoginForm() {
-    const { username, password } = this.state;
+    const { username, password, error } = this.state;
 
     return (
       <div className="item">
@@ -80,6 +100,7 @@ export default class extends React.Component {
               </tbody>
             </table>
             <br />
+            {error && <Alert>{error}</Alert>}
             <button type="submit">Login</button>
             <br />
           </form>
@@ -94,7 +115,7 @@ export default class extends React.Component {
   }
 
   renderRegisterForm() {
-    const { username, password, confirmPassword, email } = this.state
+    const { username, password, confirmPassword, email, error } = this.state
 
     return (
       <div className="item">
@@ -125,6 +146,7 @@ export default class extends React.Component {
               </tbody>
             </table>
             <br />
+            {error && <Alert>{error}</Alert>}
             <button type="submit">Register</button>
             <br />
           </form>
@@ -139,7 +161,7 @@ export default class extends React.Component {
   }
 
   renderSendPasswordResetForm() {
-    const { username } = this.state
+    const { username, error } = this.state
 
     return (
       <div className="item">
@@ -156,6 +178,7 @@ export default class extends React.Component {
               </tbody>
             </table>
             <br />
+            {error && <Alert>{error}</Alert>}
             <button type="submit">Send Link</button>
             <button onClick={this.setView(views.login)}>Cancel</button>
           </form>
@@ -177,7 +200,7 @@ export default class extends React.Component {
     }
 
     return (
-      <LayoutColumns>
+      <LayoutColumns isLoggedIn={client.isLoggedIn()}>
         {viewEl}
       </LayoutColumns>
     )
