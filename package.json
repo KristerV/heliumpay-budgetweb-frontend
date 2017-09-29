@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next -p 5000",
     "build": "next build",
-    "start": "next start -p 5000"
+    "start": "next start -p 5000",
+    "lint": "eslint"
   },
   "author": "Krister Viirsaar",
   "license": "ISC",
@@ -19,5 +20,13 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-noscript": "^1.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.7.2",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-prettier": "^2.3.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.2.3",
+    "prettier": "^1.7.2"
   }
 }

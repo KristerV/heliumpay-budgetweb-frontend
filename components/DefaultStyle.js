@@ -1,15 +1,15 @@
 import Head from 'next/head'
 import config from '../config'
 
-export default (props) => (
+export default props => (
 	<div>
 		<Head>
 			<title>{config.site.title}</title>
-			<meta charSet='utf-8' />
-			<meta name='viewport' content='initial-scale=1.0, width=device-width' />
+			<meta charSet="utf-8" />
+			<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 		</Head>
 		<style>
-		{`
+			{`
 			body, html {
 				margin: 0;
 				padding: 0;
@@ -20,6 +20,7 @@ export default (props) => (
 			body * {
 				font-family: Helvetica, Arial;
 			}
-		`}</style>
+		`}
+		</style>
 	</div>
 )

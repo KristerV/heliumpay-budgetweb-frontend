@@ -4,8 +4,7 @@ import Paper from './Paper'
 import config from '../config'
 
 export default class extends React.Component {
-
-	render () {
+	render() {
 		const data = this.props.data
 		const proposal = JSON.parse(data.DataString)[0][1]
 		const href = `?proposal=${data.Hash}`
@@ -15,11 +14,16 @@ export default class extends React.Component {
 					<Paper>
 						<div className="container">
 							<div>
-								<h1 className={data.isGettingFunded ? 'green' : 'red'}>{data.AbsoluteYesCount}</h1>
+								<h1 className={data.isGettingFunded ? 'green' : 'red'}>
+									{data.AbsoluteYesCount}
+								</h1>
 							</div>
 							<div>
 								<p>{proposal.name}</p>
-								<p className="light">{Math.round(proposal.payment_amount*100)/100} {config.ticker}</p>
+								<p className="light">
+									{Math.round(proposal.payment_amount * 100) / 100}{' '}
+									{config.ticker}
+								</p>
 							</div>
 						</div>
 					</Paper>
@@ -36,7 +40,7 @@ export default class extends React.Component {
 							margin: 0.5em 0;
 						}
 						p.light {
-							color: rgba(0,0,0,0.7);
+							color: rgba(0, 0, 0, 0.7);
 						}
 						.green {
 							color: green;
