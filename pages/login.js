@@ -12,197 +12,276 @@ import Alert from '../components/Alert'
 
 const client = new ApiClient(config.apiUrl)
 const views = {
-  login: 'login',
-  register: 'register',
-  sendPasswordReset: 'sendPasswordReset'
+	login: 'login',
+	register: 'register',
+	sendPasswordReset: 'sendPasswordReset'
 }
 
 export default class extends React.Component {
-  state = {
-    view: 'login',
-    username: '',
-    password: '',
-    confirmPassword: '',
-    email: '',
-  }
+	state = {
+		view: 'login',
+		username: '',
+		password: '',
+		confirmPassword: '',
+		email: ''
+	}
 
-  setFormValue = prop => e => {
-    this.setState({ [prop]: e.target.value });
-  }
+	static async getInitialProps(ctx) {
+		const client = new ApiClient(config.apiUrl, ctx)
+		return {
+			isLoggedIn: client.isLoggedIn()
+		}
+	}
 
-  setView = view => e => {
-    e.preventDefault();
-    this.setState({ view })
-  }
+	setFormValue = prop => e => {
+		this.setState({ [prop]: e.target.value })
+	}
 
-  register = async e => {
-    e.preventDefault();
-    const { username, password, confirmPassword, email } = this.state
-    this.setState({ error: null })
+	setView = view => e => {
+		e.preventDefault()
+		this.setState({ view })
+	}
 
-    if (password !== confirmPassword) {
-      this.setState({ error: 'passwords do not match' })
-    } else {
-      try {
-        await client.register({ username, password, email })
-        await client.login(username, password)
-        router.push('/')
-      } catch (error) {
-        this.setState({ error: error.message })
-      }
-    }
-  }
+	register = async e => {
+		e.preventDefault()
+		const { username, password, confirmPassword, email } = this.state
+		this.setState({ error: null })
 
-  login = async e => {
-    e.preventDefault();
-    const { username, password } = this.state
-    this.setState({ error: null })
+		if (password !== confirmPassword) {
+			this.setState({ error: 'passwords do not match' })
+		} else {
+			try {
+				await client.register({ username, password, email })
+				await client.login(username, password)
+				router.push('/')
+			} catch (error) {
+				this.setState({ error: error.message })
+			}
+		}
+	}
 
-    try {
-      await client.login(username, password)
-      router.push('/')
-    } catch (error) {
-      this.setState({ error: error.message })
-    }
-  }
+	login = async e => {
+		e.preventDefault()
+		const { username, password } = this.state
+		this.setState({ error: null })
 
-  sendPasswordReset = e => {
-    e.preventDefault();
-    const { username } = this.state
+		try {
+			await client.login(username, password)
+			router.push('/')
+		} catch (error) {
+			this.setState({ error: error.message })
+		}
+	}
 
-    console.log('sendPasswordReset', { username })
-  }
+	sendPasswordReset = e => {
+		e.preventDefault()
+		const { username } = this.state
 
-  renderLoginForm() {
-    const { username, password, error } = this.state;
+		console.log('sendPasswordReset', { username })
+	}
 
-    return (
-      <div className="item">
-        <h1>Login</h1>
-        <Paper>
-          <form onSubmit={this.login}>
-            <table>
-              <tbody>
-                <tr>
-                  <td><label>Username</label></td>
-                  <td><input value={username} onChange={this.setFormValue('username')} /></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td><label>Password</label></td>
-                  <td><input type="password" value={password} onChange={this.setFormValue('password')} /></td>
-                  <td>
-                    <small>
-                      <a href="#" onClick={this.setView(views.sendPasswordReset)}>Forgot?</a>
-                    </small>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <br />
-            {error && <Alert>{error}</Alert>}
-            <button type="submit">Login</button>
-            <br />
-          </form>
-          <br />
-          <small>
-            Don&apos;t have an account?&nbsp;
-            <a href="#" onClick={this.setView(views.register)}>Register</a>
-          </small>
-        </Paper>
-      </div>
-    )
-  }
+	renderLoginForm() {
+		const { username, password, error } = this.state
 
-  renderRegisterForm() {
-    const { username, password, confirmPassword, email, error } = this.state
+		return (
+			<div className="item">
+				<h1>Login</h1>
+				<Paper>
+					<form onSubmit={this.login}>
+						<table>
+							<tbody>
+								<tr>
+									<td>
+										<label>Username</label>
+									</td>
+									<td>
+										<input
+											value={username}
+											onChange={this.setFormValue('username')}
+										/>
+									</td>
+									<td />
+								</tr>
+								<tr>
+									<td>
+										<label>Password</label>
+									</td>
+									<td>
+										<input
+											type="password"
+											value={password}
+											onChange={this.setFormValue('password')}
+										/>
+									</td>
+									<td>
+										<small>
+											<a
+												href="#"
+												onClick={this.setView(views.sendPasswordReset)}
+											>
+												Forgot?
+											</a>
+										</small>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br />
+						{error && <Alert>{error}</Alert>}
+						<button type="submit">Login</button>
+						<br />
+					</form>
+					<br />
+					<small>
+						Don&apos;t have an account?&nbsp;
+						<a href="#" onClick={this.setView(views.register)}>
+							Register
+						</a>
+					</small>
+				</Paper>
+			</div>
+		)
+	}
 
-    return (
-      <div className="item">
-        <h1>Create an account</h1>
-        <Paper>
-          <form onSubmit={this.register}>
-            <table>
-              <tbody>
-                <tr>
-                  <td><label>Username</label></td>
-                  <td><input value={username} onChange={this.setFormValue('username')} /></td>
-                  <td><i>(min 3 characters, only letters, numbers and underscores, starts with a letter)</i></td>
-                </tr>
-                <tr>
-                  <td><label>Password</label></td>
-                  <td><input type="password" value={password} onChange={this.setFormValue('password')} /></td>
-                  <td><i>(min 12 characters)</i></td>
-                </tr>
-                <tr>
-                  <td><label>Confirm password</label></td>
-                  <td><input type="password" value={confirmPassword} onChange={this.setFormValue('confirmPassword')} /></td>
-                </tr>
-                <tr>
-                  <td><label>Email</label></td>
-                  <td><input type="email" value={email} onChange={this.setFormValue('email')} /></td>
-                  <td><i>(optional)</i></td>
-                </tr>
-              </tbody>
-            </table>
-            <br />
-            {error && <Alert>{error}</Alert>}
-            <button type="submit">Register</button>
-            <br />
-          </form>
-          <br />
-          <small>
-            Already have an account?&nbsp;
-            <a href="#" onClick={this.setView('login')}>Login</a>
-          </small>
-        </Paper>
-      </div>
-    )
-  }
+	renderRegisterForm() {
+		const { username, password, confirmPassword, email, error } = this.state
 
-  renderSendPasswordResetForm() {
-    const { username, error } = this.state
+		return (
+			<div className="item">
+				<h1>Create an account</h1>
+				<Paper>
+					<form onSubmit={this.register}>
+						<table>
+							<tbody>
+								<tr>
+									<td>
+										<label>Username</label>
+									</td>
+									<td>
+										<input
+											value={username}
+											onChange={this.setFormValue('username')}
+										/>
+									</td>
+									<td>
+										<i>
+											(min 3 characters, only letters, numbers and
+											underscores, starts with a letter)
+										</i>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label>Password</label>
+									</td>
+									<td>
+										<input
+											type="password"
+											value={password}
+											onChange={this.setFormValue('password')}
+										/>
+									</td>
+									<td>
+										<i>(min 12 characters)</i>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label>Confirm password</label>
+									</td>
+									<td>
+										<input
+											type="password"
+											value={confirmPassword}
+											onChange={this.setFormValue('confirmPassword')}
+										/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label>Email</label>
+									</td>
+									<td>
+										<input
+											type="email"
+											value={email}
+											onChange={this.setFormValue('email')}
+										/>
+									</td>
+									<td>
+										<i>(optional)</i>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br />
+						{error && <Alert>{error}</Alert>}
+						<button type="submit">Register</button>
+						<br />
+					</form>
+					<br />
+					<small>
+						Already have an account?&nbsp;
+						<a href="#" onClick={this.setView('login')}>
+							Login
+						</a>
+					</small>
+				</Paper>
+			</div>
+		)
+	}
 
-    return (
-      <div className="item">
-        <h1>Login</h1>
-        <Paper>
-          <form onSubmit={this.sendPasswordReset}>
-            <table>
-              <tbody>
-                <tr>
-                  <td><label>Username</label></td>
-                  <td><input value={username} onChange={this.setFormValue('username')} /></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-            <br />
-            {error && <Alert>{error}</Alert>}
-            <button type="submit">Send Link</button>
-            <button onClick={this.setView(views.login)}>Cancel</button>
-          </form>
-        </Paper>
-      </div>
-    )
-  }
+	renderSendPasswordResetForm() {
+		const { username, error } = this.state
 
-  render() {
-    const { view } = this.state
+		return (
+			<div className="item">
+				<h1>Login</h1>
+				<Paper>
+					<form onSubmit={this.sendPasswordReset}>
+						<table>
+							<tbody>
+								<tr>
+									<td>
+										<label>Username</label>
+									</td>
+									<td>
+										<input
+											value={username}
+											onChange={this.setFormValue('username')}
+										/>
+									</td>
+									<td />
+								</tr>
+							</tbody>
+						</table>
+						<br />
+						{error && <Alert>{error}</Alert>}
+						<button type="submit">Send Link</button>
+						<button onClick={this.setView(views.login)}>Cancel</button>
+					</form>
+				</Paper>
+			</div>
+		)
+	}
 
-    let viewEl
-    if (view === views.login) {
-      viewEl = this.renderLoginForm()
-    } else if (view === views.register) {
-      viewEl = this.renderRegisterForm()
-    } else if (view === views.sendPasswordReset) {
-      viewEl = this.renderSendPasswordResetForm()
-    }
+	render() {
+		const { isLoggedIn } = this.props
+		const { view } = this.state
 
-    return (
-      <LayoutColumns isLoggedIn={client.isLoggedIn()}>
-        {viewEl}
-      </LayoutColumns>
-    )
-  }
+		let viewEl
+		if (view === views.login) {
+			viewEl = this.renderLoginForm()
+		} else if (view === views.register) {
+			viewEl = this.renderRegisterForm()
+		} else if (view === views.sendPasswordReset) {
+			viewEl = this.renderSendPasswordResetForm()
+		}
+
+		return (
+			<LayoutColumns isLoggedIn={isLoggedIn} onLogout={this.logout}>
+				{viewEl}
+			</LayoutColumns>
+		)
+	}
 }

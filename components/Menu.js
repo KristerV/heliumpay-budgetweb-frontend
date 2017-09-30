@@ -1,6 +1,13 @@
 import Link from 'next/link'
+import Router from 'next/router'
+import ApiClient from '../utils/ApiClient'
 
-export default props => (
+const logout = () => {
+	const client = new ApiClient()
+	client.logout()
+}
+
+export default ({ isLoggedIn }) => (
 	<div className="container">
 		<ul>
 			<li>
@@ -13,10 +20,23 @@ export default props => (
 					<a>Create proposal</a>
 				</Link>
 			</li>
-			{props.isLoggedIn
-				? <li><a>Logout</a></li>
-				: <li><Link href="/login" prefetch><a>Login / Register</a></Link></li>
-			}
+			{isLoggedIn ? (
+				<li>
+					<Link href="/" prefetch>
+						<div>
+							<a href="javascript:;" onClick={logout}>
+								Logout
+							</a>
+						</div>
+					</Link>
+				</li>
+			) : (
+					<li>
+						<Link href="/login" prefetch>
+							<a>Login / Register</a>
+						</Link>
+					</li>
+				)}
 		</ul>
 		<style jsx>{`
 			.container {

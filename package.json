@@ -4,15 +4,15 @@
   "description": "Helium Pay budget voting website front-end",
   "main": "index.js",
   "scripts": {
-    "dev": "next -p 5000",
     "build": "next build",
-    "start": "next start -p 5000",
+    "start": "node index.js",
     "lint": "eslint ."
   },
   "author": "Krister Viirsaar",
   "license": "ISC",
   "dependencies": {
     "bitcore-lib-dash": "^0.14.3",
+    "cookie": "^0.3.1",
     "express": "^4.15.4",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.18.1",
@@ -22,6 +22,7 @@
     "react-noscript": "^1.0.2"
   },
   "devDependencies": {
+    "babel-eslint": "^8.0.1",
     "eslint": "^4.7.2",
     "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-prettier": "^2.3.1",
