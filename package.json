@@ -7,7 +7,7 @@
     "dev": "next -p 5000",
     "build": "next build",
     "start": "next start -p 5000",
-    "lint": "eslint"
+    "lint": "eslint ."
   },
   "author": "Krister Viirsaar",
   "license": "ISC",
