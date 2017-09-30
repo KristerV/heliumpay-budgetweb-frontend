@@ -7,8 +7,7 @@ export default class extends React.Component {
 	render() {
 		let isChildren = false
 		if (this.props.children) {
-			if (this.props.children.hasOwnProperty("props"))
-				isChildren = true
+			if (this.props.children.hasOwnProperty('props')) isChildren = true
 			else {
 				this.props.children.forEach(c => {
 					isChildren = isChildren || !!c
@@ -19,29 +18,33 @@ export default class extends React.Component {
 			<div className="outer">
 				<DefaultStyle />
 				<div className="inner">
-
-					{isChildren ?
+					{isChildren ? (
 						<div className="column third">
-							{this.props.middleColumn ?
-								<Link href="/" prefetch><a className="desktop-hidden">&lt; PROPOSALS</a></Link>
-								:
-								<Link href="/menu" prefetch><a className="desktop-hidden">&lt; MENU</a></Link>
-							}
+							{this.props.middleColumn ? (
+								<Link href="/" prefetch>
+									<a className="desktop-hidden">&lt; PROPOSALS</a>
+								</Link>
+							) : (
+									<Link href="/menu" prefetch>
+										<a className="desktop-hidden">&lt; MENU</a>
+									</Link>
+								)}
 							{this.props.children}
 						</div>
-						: null}
+					) : null}
 
-					{this.props.middleColumn ?
+					{this.props.middleColumn ? (
 						<div className="column second">
-							<Link href="/menu" prefetch><a className="desktop-hidden">&lt; MENU</a></Link>
+							<Link href="/menu" prefetch>
+								<a className="desktop-hidden">&lt; MENU</a>
+							</Link>
 							{this.props.middleColumn}
 						</div>
-						: null}
+					) : null}
 
 					<div className="column first">
-						<Menu isLoggedIn={this.props.isLoggedIn} />
+						<Menu />
 					</div>
-
 				</div>
 				<style jsx>{`
 					.outer {
@@ -73,7 +76,7 @@ export default class extends React.Component {
 						display: none;
 						color: black;
 					}
-					@media screen and (orientation:portrait), screen and (max-width: 1200px) {
+					@media screen and (orientation: portrait), screen and (max-width: 1200px) {
 						.inner {
 							flex-direction: column;
 						}
