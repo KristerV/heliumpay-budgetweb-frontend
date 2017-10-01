@@ -14,11 +14,22 @@ export default class ApiClient {
 		return token
 	}
 
+	async confirmEmail(userId) {
+		const user = await this.makeRequest('post', `users/${userId}/confirmEmail`)
+		return user
+	}
+
 	async sendPasswordResetEmail(email) {
 		await this.makeRequest('post', 'login/sendPasswordResetEmail', { email })
 	}
 
+	async resetPassword(userId, password) {
+		const user = await this.makeRequest('post', `users/${userId}/resetPassword`, { password })
+		return user
+	}
+
 	async makeRequest(method, endpoint, body) {
+		console.log('token', this.token)
 		const response = await fetch(`${this.baseUrl}/v0/${endpoint}`, {
 			method,
 			headers: {

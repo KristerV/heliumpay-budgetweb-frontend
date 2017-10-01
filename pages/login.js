@@ -44,7 +44,6 @@ export default class Login extends React.Component {
 		try {
 			const token = await client.login(username, password)
 			cookieUtils.setToken(token)
-			this.setState({ isFetching: false })
 			router.push('/')
 		} catch (error) {
 			this.setState({ error: error.message, isFetching: false })

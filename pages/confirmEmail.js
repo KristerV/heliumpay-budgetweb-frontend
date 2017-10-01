@@ -18,21 +18,31 @@ export default class ConfirmEmail extends React.Component {
 	}
 
 	static async getInitialProps(ctx) {
-		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
-		const { token } = ctx.query
-
-		// make request
-		// TODO: confirm email should contain username
+		const { userId, token, error } = ctx.query
+		let client
+		// confirm email only when rendering serverside
+		if (ctx.res && userId && token) {
+			// use the provided token to confirm the users email then redirect to itself without the
+			// query parameters
+			try {
+				client = new ApiClient(config.apiUrl, token)
+				const user = await client.confirmEmail(userId)
+				ctx.res.redirect('/confirmEmail')
+			} catch (err) {
+				ctx.res.redirect(`/confirmEmail?error=${err.message}`)
+			}
+		} else {
+			client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
+		}
 
 		return {
 			isLoggedIn: client.isLoggedIn(),
-			error: null
+			error
 		}
 	}
 
 	render() {
 		const { isLoggedIn, error } = this.props
-
 		return (
 			<LayoutColumns isLoggedIn={isLoggedIn}>
 				<Paper>{error ? <Alert>{error}</Alert> : 'email confirmed'}</Paper>

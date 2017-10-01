@@ -51,7 +51,7 @@ export default class ForgotPassword extends React.Component {
 		return (
 			<LayoutColumns isLoggedIn={isLoggedIn}>
 				<div className="item">
-					<h1>Login</h1>
+					<h1>Reset Password</h1>
 					<Paper>
 						<form onSubmit={this.sendPasswordResetEmail}>
 							<table>
@@ -79,7 +79,7 @@ export default class ForgotPassword extends React.Component {
 								</button>
 							) : (
 									<button type="submit">
-										{isFetching ? 'Sending...' : 'Sent Link'}
+										{isFetching ? 'Sending...' : 'Send Link'}
 									</button>
 								)}
 							<Link href="/login" prefetch>

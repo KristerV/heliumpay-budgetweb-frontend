@@ -35,18 +35,17 @@ export default class Register extends React.Component {
 	register = async e => {
 		e.preventDefault()
 		const { password, confirmPassword, email } = this.state
-		const username = this.state.username || this.props.query.username
+		const username = this.state.username || this.props.query.username || ''
 
 		this.setState({ error: null, isFetching: true })
 
 		if (password !== confirmPassword) {
-			this.setState({ error: 'passwords do not match' })
+			this.setState({ error: 'passwords do not match', isFetching: false })
 		} else {
 			try {
 				await client.register({ username: username, password, email })
 				const token = await client.login(username, password)
 				cookieUtils.setToken(token)
-				this.setState({ isFetching: false })
 				router.push('/')
 			} catch (error) {
 				this.setState({ error: error.message, isFetching: false })
@@ -57,7 +56,7 @@ export default class Register extends React.Component {
 	render() {
 		const { isLoggedIn } = this.props
 		const { password, confirmPassword, email, error, isFetching } = this.state
-		const username = this.state.username || this.props.query.username
+		const username = this.state.username || this.props.query.username || ''
 
 		return (
 			<LayoutColumns isLoggedIn={isLoggedIn}>
