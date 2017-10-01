@@ -6,6 +6,7 @@ import Bitcore from 'bitcore-lib-dash'
 import NoScript from 'react-noscript'
 import config from '../config'
 import ApiClient from '../utils/ApiClient'
+import * as cookieUtils from '../utils/cookieUtils'
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
 import Alert from '../components/Alert'
@@ -20,7 +21,7 @@ export default class ForgotPassword extends React.Component {
 	}
 
 	static async getInitialProps(ctx) {
-		const client = new ApiClient(config.apiUrl, ctx)
+		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
 		return {
 			isLoggedIn: client.isLoggedIn()
 		}
@@ -48,7 +49,7 @@ export default class ForgotPassword extends React.Component {
 		const { email, error, isFetching, hasSent } = this.state
 
 		return (
-			<LayoutColumns isLoggedIn={isLoggedIn} onLogout={this.logout}>
+			<LayoutColumns isLoggedIn={isLoggedIn}>
 				<div className="item">
 					<h1>Login</h1>
 					<Paper>

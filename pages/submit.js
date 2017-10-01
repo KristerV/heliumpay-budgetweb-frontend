@@ -4,6 +4,7 @@ import moment from 'moment'
 import Bitcore from 'bitcore-lib-dash'
 import NoScript from 'react-noscript'
 import config from '../config'
+import * as cookieUtils from '../utils/cookieUtils'
 import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
@@ -16,8 +17,7 @@ export default class Submit extends React.Component {
 	}
 
 	static async getInitialProps(ctx) {
-		const client = new ApiClient(config.apiUrl, ctx)
-
+		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
 		return {
 			isLoggedIn: client.isLoggedIn(),
 			startepoch: moment().unix(),

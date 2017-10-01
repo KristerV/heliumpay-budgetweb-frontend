@@ -3,6 +3,7 @@ import Link from 'next/link'
 import 'isomorphic-fetch'
 
 import config from '../config'
+import * as cookieUtils from '../utils/cookieUtils'
 import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
 import ProposalPreview from '../components/ProposalPreview'
@@ -12,7 +13,7 @@ export default class Proposals extends React.Component {
 	state = {}
 
 	static async getInitialProps(ctx) {
-		const client = new ApiClient(config.apiUrl, ctx)
+		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
 		let errors = []
 
 		const proposalsResult = await fetch(config.apiUrl + '/v0/core/proposals?status=active')

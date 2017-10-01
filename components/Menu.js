@@ -1,11 +1,6 @@
 import Link from 'next/link'
 import Router from 'next/router'
-import ApiClient from '../utils/ApiClient'
-
-const logout = () => {
-	const client = new ApiClient()
-	client.logout()
-}
+import * as cookieUtils from '../utils/cookieUtils'
 
 export default ({ isLoggedIn }) => (
 	<div className="container">
@@ -24,7 +19,7 @@ export default ({ isLoggedIn }) => (
 				<li>
 					<Link href="/" prefetch>
 						<div>
-							<a href="javascript:;" onClick={logout}>
+							<a href="javascript:;" onClick={cookieUtils.remove}>
 								Logout
 							</a>
 						</div>

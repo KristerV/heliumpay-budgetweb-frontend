@@ -3,6 +3,7 @@ import Link from 'next/link'
 import router from 'next/router'
 import queryString from 'query-string'
 import config from '../config'
+import * as cookieUtils from '../utils/cookieUtils'
 import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
@@ -20,7 +21,7 @@ export default class Register extends React.Component {
 	}
 
 	static async getInitialProps(ctx) {
-		const client = new ApiClient(config.apiUrl, ctx)
+		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
 		return {
 			isLoggedIn: client.isLoggedIn(),
 			query: ctx.query
@@ -33,16 +34,18 @@ export default class Register extends React.Component {
 
 	register = async e => {
 		e.preventDefault()
-		const { query } = this.props
-		const { username, password, confirmPassword, email } = this.state
+		const { password, confirmPassword, email } = this.state
+		const username = this.state.username || this.props.query.username
+
 		this.setState({ error: null, isFetching: true })
 
 		if (password !== confirmPassword) {
 			this.setState({ error: 'passwords do not match' })
 		} else {
 			try {
-				await client.register({ username: username || query.username, password, email })
-				await client.login(username, password)
+				await client.register({ username: username, password, email })
+				const token = await client.login(username, password)
+				cookieUtils.setToken(token)
 				this.setState({ isFetching: false })
 				router.push('/')
 			} catch (error) {
@@ -52,11 +55,12 @@ export default class Register extends React.Component {
 	}
 
 	render() {
-		const { isLoggedIn, query } = this.props
-		const { username, password, confirmPassword, email, error, isFetching } = this.state
+		const { isLoggedIn } = this.props
+		const { password, confirmPassword, email, error, isFetching } = this.state
+		const username = this.state.username || this.props.query.username
 
 		return (
-			<LayoutColumns isLoggedIn={isLoggedIn} onLogout={this.logout}>
+			<LayoutColumns isLoggedIn={isLoggedIn}>
 				<div className="item">
 					<h1>Create an account</h1>
 					<Paper>
@@ -69,7 +73,7 @@ export default class Register extends React.Component {
 										</td>
 										<td>
 											<input
-												value={username || query.username}
+												value={username}
 												onChange={this.setFormValue('username')}
 											/>
 										</td>
