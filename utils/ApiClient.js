@@ -21,7 +21,7 @@ export default class ApiClient {
 		this.setToken(null, new Date(0))
 	}
 
-	async sendPasswordRestEmail(email) {
+	async sendPasswordResetEmail(email) {
 		await this.makeRequest('post', 'login/sendPasswordResetEmail', { email })
 	}
 

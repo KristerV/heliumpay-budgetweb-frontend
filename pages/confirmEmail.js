@@ -12,7 +12,7 @@ import Alert from '../components/Alert'
 
 const client = new ApiClient(config.apiUrl)
 
-export default class extends React.Component {
+export default class ConfirmEmail extends React.Component {
 	state = {
 		email: '',
 		resetlinkSent: false

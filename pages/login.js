@@ -11,20 +11,12 @@ import Paper from '../components/Paper'
 import Alert from '../components/Alert'
 
 const client = new ApiClient(config.apiUrl)
-const views = {
-	login: 'login',
-	register: 'register',
-	sendPasswordResetEmail: 'sendPasswordResetEmail'
-}
 
-export default class extends React.Component {
+export default class Login extends React.Component {
 	state = {
-		view: 'login',
+		isFetching: false,
 		username: '',
-		password: '',
-		confirmPassword: '',
-		email: '',
-		resetlinkSent: false
+		password: ''
 	}
 
 	static async getInitialProps(ctx) {
@@ -46,19 +38,20 @@ export default class extends React.Component {
 	login = async e => {
 		e.preventDefault()
 		const { username, password } = this.state
-		this.setState({ error: null })
+		this.setState({ error: null, isFetching: true })
 
 		try {
 			await client.login(username, password)
+			this.setState({ isFetching: false })
 			router.push('/')
 		} catch (error) {
-			this.setState({ error: error.message })
+			this.setState({ error: error.message, isFetching: false })
 		}
 	}
 
 	render() {
 		const { isLoggedIn } = this.props
-		const { username, password, error } = this.state
+		const { username, password, error, isFetching } = this.state
 
 		return (
 			<LayoutColumns isLoggedIn={isLoggedIn} onLogout={this.logout}>
@@ -103,7 +96,9 @@ export default class extends React.Component {
 							</table>
 							<br />
 							{error && <Alert>{error}</Alert>}
-							<button type="submit">Login</button>
+							<button type="submit" disabled={isFetching}>
+								{isFetching ? 'Logging in...' : 'Login'}
+							</button>
 							<br />
 						</form>
 						<br />

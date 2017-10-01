@@ -8,7 +8,7 @@ import LayoutColumns from '../components/LayoutColumns'
 import ProposalPreview from '../components/ProposalPreview'
 import Proposal from '../components/Proposal'
 
-export default class extends React.Component {
+export default class Proposals extends React.Component {
 	state = {}
 
 	static async getInitialProps(ctx) {

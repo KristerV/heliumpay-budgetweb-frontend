@@ -8,7 +8,7 @@ import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
 
-export default class extends React.Component {
+export default class Submit extends React.Component {
 	state = {
 		errorForm1: null,
 		prepCommand: 'Command will appear here',

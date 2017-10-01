@@ -12,10 +12,11 @@ import Alert from '../components/Alert'
 
 const client = new ApiClient(config.apiUrl)
 
-export default class extends React.Component {
+export default class ForgotPassword extends React.Component {
 	state = {
 		email: '',
-		resetlinkSent: false
+		isFetching: false,
+		hasSent: false
 	}
 
 	static async getInitialProps(ctx) {
@@ -32,19 +33,19 @@ export default class extends React.Component {
 	sendPasswordResetEmail = async e => {
 		e.preventDefault()
 		const { email } = this.state
-		this.setState({ error: null, resetlinkSent: false })
+		this.setState({ error: null, isFetching: true, hasSent: false })
 
 		try {
 			await client.sendPasswordResetEmail(email)
-			this.setState({ resetlinkSent: true })
+			this.setState({ isFetching: false, hasSent: true })
 		} catch (error) {
-			this.setState({ error: error.message })
+			this.setState({ error: error.message, isFetching: false })
 		}
 	}
 
 	render() {
 		const { isLoggedIn } = this.props
-		const { email, error } = this.state
+		const { email, error, isFetching, hasSent } = this.state
 
 		return (
 			<LayoutColumns isLoggedIn={isLoggedIn} onLogout={this.logout}>
@@ -71,7 +72,15 @@ export default class extends React.Component {
 							</table>
 							<br />
 							{error && <Alert>{error}</Alert>}
-							<button type="submit">Send Link</button>
+							{hasSent ? (
+								<button type="submit">
+									{isFetching ? 'Sending...' : 'Resend Link'}
+								</button>
+							) : (
+									<button type="submit">
+										{isFetching ? 'Sending...' : 'Sent Link'}
+									</button>
+								)}
 							<Link href="/login" prefetch>
 								<button>Cancel</button>
 							</Link>

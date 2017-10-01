@@ -12,6 +12,7 @@ const client = new ApiClient(config.apiUrl)
 
 export default class Register extends React.Component {
 	state = {
+		isFetching: false,
 		username: '',
 		password: '',
 		confirmPassword: '',
@@ -32,25 +33,27 @@ export default class Register extends React.Component {
 
 	register = async e => {
 		e.preventDefault()
+		const { query } = this.props
 		const { username, password, confirmPassword, email } = this.state
-		this.setState({ error: null })
+		this.setState({ error: null, isFetching: true })
 
 		if (password !== confirmPassword) {
 			this.setState({ error: 'passwords do not match' })
 		} else {
 			try {
-				await client.register({ username, password, email })
+				await client.register({ username: username || query.username, password, email })
 				await client.login(username, password)
+				this.setState({ isFetching: false })
 				router.push('/')
 			} catch (error) {
-				this.setState({ error: error.message })
+				this.setState({ error: error.message, isFetching: false })
 			}
 		}
 	}
 
 	render() {
 		const { isLoggedIn, query } = this.props
-		const { username, password, confirmPassword, email, error } = this.state
+		const { username, password, confirmPassword, email, error, isFetching } = this.state
 
 		return (
 			<LayoutColumns isLoggedIn={isLoggedIn} onLogout={this.logout}>
@@ -123,7 +126,9 @@ export default class Register extends React.Component {
 							</table>
 							<br />
 							{error && <Alert>{error}</Alert>}
-							<button type="submit">Register</button>
+							<button type="submit" disabled={isFetching}>
+								{isFetching ? 'Registering...' : 'Register'}
+							</button>
 							<br />
 						</form>
 						<br />
