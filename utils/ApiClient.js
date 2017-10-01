@@ -5,6 +5,10 @@ export default class ApiClient {
 		this.baseUrl = baseUrl
 		this.ctx = ctx
 	}
+	async register(attrs) {
+		const user = await this.makeRequest('post', 'users', attrs)
+		return user
+	}
 
 	async login(username, password) {
 		const { token } = await this.makeRequest('post', 'login', { username, password })
@@ -17,9 +21,8 @@ export default class ApiClient {
 		this.setToken(null, new Date(0))
 	}
 
-	async register(attrs) {
-		const user = await this.makeRequest('post', 'users', attrs)
-		return user
+	async sendPasswordRestEmail(email) {
+		await this.makeRequest('post', 'login/sendPasswordResetEmail', { email })
 	}
 
 	async makeRequest(method, endpoint, body) {

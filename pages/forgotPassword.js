@@ -11,18 +11,9 @@ import Paper from '../components/Paper'
 import Alert from '../components/Alert'
 
 const client = new ApiClient(config.apiUrl)
-const views = {
-	login: 'login',
-	register: 'register',
-	sendPasswordResetEmail: 'sendPasswordResetEmail'
-}
 
 export default class extends React.Component {
 	state = {
-		view: 'login',
-		username: '',
-		password: '',
-		confirmPassword: '',
 		email: '',
 		resetlinkSent: false
 	}
@@ -38,19 +29,14 @@ export default class extends React.Component {
 		this.setState({ [prop]: e.target.value })
 	}
 
-	setView = view => e => {
+	sendPasswordResetEmail = async e => {
 		e.preventDefault()
-		this.setState({ view })
-	}
-
-	login = async e => {
-		e.preventDefault()
-		const { username, password } = this.state
-		this.setState({ error: null })
+		const { email } = this.state
+		this.setState({ error: null, resetlinkSent: false })
 
 		try {
-			await client.login(username, password)
-			router.push('/')
+			await client.sendPasswordResetEmail(email)
+			this.setState({ resetlinkSent: true })
 		} catch (error) {
 			this.setState({ error: error.message })
 		}
@@ -58,67 +44,38 @@ export default class extends React.Component {
 
 	render() {
 		const { isLoggedIn } = this.props
-		const { username, password, error } = this.state
+		const { email, error } = this.state
 
 		return (
 			<LayoutColumns isLoggedIn={isLoggedIn} onLogout={this.logout}>
 				<div className="item">
 					<h1>Login</h1>
 					<Paper>
-						<form onSubmit={this.login}>
+						<form onSubmit={this.sendPasswordResetEmail}>
 							<table>
 								<tbody>
 									<tr>
 										<td>
-											<label>Username</label>
+											<label>Email</label>
 										</td>
 										<td>
 											<input
-												value={username}
-												onChange={this.setFormValue('username')}
+												type="email"
+												value={email}
+												onChange={this.setFormValue('email')}
 											/>
 										</td>
 										<td />
-									</tr>
-									<tr>
-										<td>
-											<label>Password</label>
-										</td>
-										<td>
-											<input
-												type="password"
-												value={password}
-												onChange={this.setFormValue('password')}
-											/>
-										</td>
-										<td>
-											<small>
-												<Link href="/forgotPassword" prefetch>
-													<a>Forgot?</a>
-												</Link>
-											</small>
-										</td>
 									</tr>
 								</tbody>
 							</table>
 							<br />
 							{error && <Alert>{error}</Alert>}
-							<button type="submit">Login</button>
-							<br />
-						</form>
-						<br />
-						<small>
-							Don&apos;t have an account?&nbsp;
-							<Link
-								href={{
-									pathname: '/register',
-									query: username ? { username } : {}
-								}}
-								prefetch
-							>
-								<a>Register</a>
+							<button type="submit">Send Link</button>
+							<Link href="/login" prefetch>
+								<button>Cancel</button>
 							</Link>
-						</small>
+						</form>
 					</Paper>
 				</div>
 			</LayoutColumns>
