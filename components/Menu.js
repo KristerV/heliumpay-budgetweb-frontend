@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Router from 'next/router'
 import * as cookieUtils from '../utils/cookieUtils'
 
 export default ({ isLoggedIn }) => (
@@ -26,12 +25,12 @@ export default ({ isLoggedIn }) => (
 					</Link>
 				</li>
 			) : (
-					<li>
-						<Link href="/login" prefetch>
-							<a>Login / Register</a>
-						</Link>
-					</li>
-				)}
+				<li>
+					<Link href="/login" prefetch>
+						<a>Login / Register</a>
+					</Link>
+				</li>
+			)}
 		</ul>
 		<style jsx>{`
 			.container {

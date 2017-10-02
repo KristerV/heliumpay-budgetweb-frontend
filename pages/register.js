@@ -1,7 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
 import router from 'next/router'
-import queryString from 'query-string'
 import config from '../config'
 import * as cookieUtils from '../utils/cookieUtils'
 import ApiClient from '../utils/ApiClient'

@@ -1,6 +1,5 @@
 import config from '../config'
 import React from 'react'
-import Link from 'next/link'
 import Paper from './Paper'
 
 export default class extends React.Component {
@@ -8,7 +7,7 @@ export default class extends React.Component {
 		const proposal = this.props.proposal
 		const extraData = JSON.parse(proposal.DataString)[0][1]
 		const startDate = new Date(extraData.start_epoch * 1000).toISOString().slice(0, 10)
-		const endDate = new Date(extraData.end_epoch * 1000).toISOString().slice(0, 10)
+		// const endDate = new Date(extraData.end_epoch * 1000).toISOString().slice(0, 10)
 		return (
 			<Paper>
 				<div className="item">

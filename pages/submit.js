@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
 import moment from 'moment'
 import Bitcore from 'bitcore-lib-dash'
 import NoScript from 'react-noscript'
@@ -62,7 +61,6 @@ export default class Submit extends React.Component {
 		e.preventDefault()
 		const form = e.target
 		const proposal = this.state.proposal
-		const form1 = this.state.form1
 
 		const submitCommand = `gobject submit ${proposal.parenthash} ${proposal.revision} ${proposal.time} ${this
 			.state.dataSerialized} ${form.txid.value}`

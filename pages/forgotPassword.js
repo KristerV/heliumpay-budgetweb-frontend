@@ -1,9 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import router from 'next/router'
-import moment from 'moment'
-import Bitcore from 'bitcore-lib-dash'
-import NoScript from 'react-noscript'
 import config from '../config'
 import ApiClient from '../utils/ApiClient'
 import * as cookieUtils from '../utils/cookieUtils'
@@ -78,10 +74,10 @@ export default class ForgotPassword extends React.Component {
 									{isFetching ? 'Sending...' : 'Resend Link'}
 								</button>
 							) : (
-									<button type="submit">
-										{isFetching ? 'Sending...' : 'Send Link'}
-									</button>
-								)}
+								<button type="submit">
+									{isFetching ? 'Sending...' : 'Send Link'}
+								</button>
+							)}
 							<Link href="/login" prefetch>
 								<button>Cancel</button>
 							</Link>

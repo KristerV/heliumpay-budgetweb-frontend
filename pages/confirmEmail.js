@@ -1,9 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
-import router from 'next/router'
-import moment from 'moment'
-import Bitcore from 'bitcore-lib-dash'
-import NoScript from 'react-noscript'
 import config from '../config'
 import * as cookieUtils from '../utils/cookieUtils'
 import ApiClient from '../utils/ApiClient'
@@ -26,7 +21,7 @@ export default class ConfirmEmail extends React.Component {
 			// then redirect to itself without the query parameters
 			try {
 				client = new ApiClient(config.apiUrl, token)
-				const user = await client.confirmEmail(userId)
+				await client.confirmEmail(userId)
 				ctx.res.redirect('/confirmEmail')
 			} catch (err) {
 				ctx.res.redirect(`/confirmEmail?error=${err.message}`)

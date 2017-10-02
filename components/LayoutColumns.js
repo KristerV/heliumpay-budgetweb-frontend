@@ -27,10 +27,10 @@ export default class extends React.Component {
 									<a className="desktop-hidden">&lt; PROPOSALS</a>
 								</Link>
 							) : (
-									<Link href="/menu" prefetch>
-										<a className="desktop-hidden">&lt; MENU</a>
-									</Link>
-								)}
+								<Link href="/menu" prefetch>
+									<a className="desktop-hidden">&lt; MENU</a>
+								</Link>
+							)}
 							{children}
 						</div>
 					) : null}

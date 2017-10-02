@@ -1,9 +1,11 @@
 {
   "parser": "babel-eslint",
   "extends": [
-    "prettier"
+    "prettier",
+    "prettier/react"
   ],
   "plugins": [
+    "react",
     "prettier"
   ],
   "rules": {
@@ -16,7 +18,10 @@
         "useTabs": true,
         "tabWidth": 4
       }
-    ]
+    ],
+    "no-unused-vars": "error",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
   },
   "parserOptions": {
     "ecmaVersion": 8,
