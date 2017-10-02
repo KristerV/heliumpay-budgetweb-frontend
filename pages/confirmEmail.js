@@ -22,8 +22,8 @@ export default class ConfirmEmail extends React.Component {
 		let client
 		// confirm email only when rendering serverside
 		if (ctx.res && userId && token) {
-			// use the provided token to confirm the users email then redirect to itself without the
-			// query parameters
+			// use the provided token and user id to confirm the users email
+			// then redirect to itself without the query parameters
 			try {
 				client = new ApiClient(config.apiUrl, token)
 				const user = await client.confirmEmail(userId)

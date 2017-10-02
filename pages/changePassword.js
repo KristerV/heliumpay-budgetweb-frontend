@@ -42,8 +42,10 @@ export default class Login extends React.Component {
 			this.setState({ error: 'passwords do not match', isFetching: false })
 		} else {
 			try {
+				// uses reset token to change password
 				const client = new ApiClient(config.apiUrl, token)
 				const user = await client.resetPassword(userId, password)
+				// create and sets new user token
 				const userToken = await client.login(user.username, password)
 				cookieUtils.setToken(userToken)
 				router.push('/')

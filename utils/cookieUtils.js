@@ -11,10 +11,10 @@ export function getToken(ctx) {
 	let token
 
 	if (ctx && ctx.req && ctx.req.headers && ctx.req.headers.cookie) {
-		// server context
+		// server context with cookie headeer
 		token = cookie.parse(ctx.req.headers.cookie).token
 	} else if (typeof document !== 'undefined' && document.cookie) {
-		// browser context
+		// browser context with document cookie
 		token = cookie.parse(document.cookie).token
 	}
 

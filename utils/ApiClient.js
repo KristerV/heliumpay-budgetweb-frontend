@@ -3,6 +3,7 @@ export default class ApiClient {
 		this.baseUrl = baseUrl
 		this.token = token
 	}
+
 	async register(attrs) {
 		const user = await this.makeRequest('post', 'users', attrs)
 		return user
@@ -29,7 +30,6 @@ export default class ApiClient {
 	}
 
 	async makeRequest(method, endpoint, body) {
-		console.log('token', this.token)
 		const response = await fetch(`${this.baseUrl}/v0/${endpoint}`, {
 			method,
 			headers: {
