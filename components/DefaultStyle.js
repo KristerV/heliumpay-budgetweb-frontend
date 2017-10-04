@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import config from '../config'
 
-export default props => (
+export default () => (
 	<div>
 		<Head>
 			<title>{config.site.title}</title>

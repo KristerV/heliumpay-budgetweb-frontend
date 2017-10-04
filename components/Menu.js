@@ -1,6 +1,7 @@
 import Link from 'next/link'
+import * as cookieUtils from '../utils/cookieUtils'
 
-export default props => (
+export default ({ isLoggedIn }) => (
 	<div className="container">
 		<ul>
 			<li>
@@ -13,6 +14,23 @@ export default props => (
 					<a>Create proposal</a>
 				</Link>
 			</li>
+			{isLoggedIn ? (
+				<li>
+					<Link href="/" prefetch>
+						<div>
+							<a href="javascript:;" onClick={cookieUtils.remove}>
+								Logout
+							</a>
+						</div>
+					</Link>
+				</li>
+			) : (
+				<li>
+					<Link href="/login" prefetch>
+						<a>Login / Register</a>
+					</Link>
+				</li>
+			)}
 		</ul>
 		<style jsx>{`
 			.container {

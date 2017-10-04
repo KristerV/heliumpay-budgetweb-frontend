@@ -1,19 +1,18 @@
 import React from 'react'
-import Link from 'next/link'
-import config from '../config'
 import 'isomorphic-fetch'
 
+import config from '../config'
+import * as cookieUtils from '../utils/cookieUtils'
+import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
 import ProposalPreview from '../components/ProposalPreview'
 import Proposal from '../components/Proposal'
 
-export default class extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {}
-	}
+export default class Proposals extends React.Component {
+	state = {}
 
-	static async getInitialProps(props) {
+	static async getInitialProps(ctx) {
+		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
 		let errors = []
 
 		const proposalsResult = await fetch(config.apiUrl + '/v0/core/proposals?status=active')
@@ -31,9 +30,9 @@ export default class extends React.Component {
 		}
 
 		let proposal = {}
-		if (props.query.proposal) {
+		if (ctx.query.proposal) {
 			const proposalResult = await fetch(
-				config.apiUrl + '/v0/core/proposals/' + props.query.proposal
+				config.apiUrl + '/v0/core/proposals/' + ctx.query.proposal
 			)
 			proposal = await proposalResult.json()
 			if (proposalResult.status !== 200) {
@@ -43,6 +42,7 @@ export default class extends React.Component {
 		}
 
 		return {
+			isLoggedIn: client.isLoggedIn(),
 			proposals,
 			budget,
 			proposal,
@@ -51,12 +51,10 @@ export default class extends React.Component {
 	}
 
 	render() {
-		const budget = this.props.budget
+		const { isLoggedIn, budget, proposals, proposal, errors } = this.props
 		const header = (
 			<div key="sdf689asdf">
-				<p>
-					There are {this.props.proposals.length} active proposals (not counting closed).
-				</p>
+				<p>There are {proposals.length} active proposals (not counting closed).</p>
 				<p>
 					Next payment will be {Math.round(budget.budgetTotal * 100) / 100}{' '}
 					{config.ticker} and it will occur in{' '}
@@ -70,13 +68,13 @@ export default class extends React.Component {
 				</p>
 			</div>
 		)
-		const column = this.props.proposals.map((p, i) => <ProposalPreview data={p} key={i} />)
+		const column = proposals.map((p, i) => <ProposalPreview data={p} key={i} />)
 		column.unshift(header)
-		const proposal = Object.keys(this.props.proposal).length ? this.props.proposal : null
-		const errors = this.props.errors.length ? this.props.errors : null
+		const hasProposal = Object.keys(proposal).length > 0
+		const hasErrors = errors.length > 0
 		return (
-			<LayoutColumns middleColumn={column}>
-				{errors ? (
+			<LayoutColumns middleColumn={column} isLoggedIn={isLoggedIn}>
+				{hasErrors ? (
 					<p className="error">
 						{errors}
 						<style jsx>{`
@@ -86,7 +84,7 @@ export default class extends React.Component {
 						`}</style>
 					</p>
 				) : null}
-				{proposal ? <Proposal proposal={proposal} /> : null}
+				{hasProposal ? <Proposal proposal={proposal} /> : null}
 			</LayoutColumns>
 		)
 	}

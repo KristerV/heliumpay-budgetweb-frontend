@@ -1,25 +1,32 @@
 import React from 'react'
-import Link from 'next/link'
 import moment from 'moment'
 import Bitcore from 'bitcore-lib-dash'
 import NoScript from 'react-noscript'
 import config from '../config'
+import * as cookieUtils from '../utils/cookieUtils'
+import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
 
-export default class extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			errorForm1: null,
-			prepCommand: 'Command will appear here',
-			submitCommand: 'Command will appear here'
-		}
-		this.createPrepareCommand = this.createPrepareCommand.bind(this)
-		this.createSubmitCommand = this.createSubmitCommand.bind(this)
+export default class Submit extends React.Component {
+	state = {
+		errorForm1: null,
+		prepCommand: 'Command will appear here',
+		submitCommand: 'Command will appear here'
 	}
 
-	createPrepareCommand(e) {
+	static async getInitialProps(ctx) {
+		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
+		return {
+			isLoggedIn: client.isLoggedIn(),
+			startepoch: moment().unix(),
+			endepoch: moment()
+				.add(2, 'months')
+				.unix()
+		}
+	}
+
+	createPrepareCommand = e => {
 		e.preventDefault()
 		const form = e.target
 
@@ -50,29 +57,21 @@ export default class extends React.Component {
 		this.setState({ prepCommand, proposal, dataSerialized })
 	}
 
-	createSubmitCommand(e) {
+	createSubmitCommand = e => {
 		e.preventDefault()
 		const form = e.target
 		const proposal = this.state.proposal
-		const form1 = this.state.form1
 
 		const submitCommand = `gobject submit ${proposal.parenthash} ${proposal.revision} ${proposal.time} ${this
 			.state.dataSerialized} ${form.txid.value}`
 		this.setState({ submitCommand })
 	}
 
-	static async getInitialProps({ req }) {
-		return {
-			startepoch: moment().unix(),
-			endepoch: moment()
-				.add(2, 'months')
-				.unix()
-		}
-	}
-
 	render() {
+		const { isLoggedIn, startepoch, endepoch } = this.props
+
 		return (
-			<LayoutColumns>
+			<LayoutColumns isLoggedIn={isLoggedIn}>
 				<div className="item">
 					<h1>Create a proposal</h1>
 					<NoScript>
@@ -118,7 +117,7 @@ export default class extends React.Component {
 										<td>
 											<input
 												id="start_epoch"
-												defaultValue={this.props.startepoch}
+												defaultValue={startepoch}
 												placeholder="Start epoch"
 											/>
 										</td>
@@ -134,7 +133,7 @@ export default class extends React.Component {
 											<input
 												id="end_epoch"
 												placeholder="End epoch"
-												defaultValue={this.props.endepoch}
+												defaultValue={endepoch}
 											/>
 										</td>
 										<td>
@@ -171,11 +170,7 @@ export default class extends React.Component {
 							<input id="type" className="hidden" defaultValue="1" />
 							<input id="parenthash" className="hidden" defaultValue="0" />
 							<input id="revision" className="hidden" defaultValue="1" />
-							<input
-								id="time"
-								className="hidden"
-								defaultValue={this.props.startepoch}
-							/>
+							<input id="time" className="hidden" defaultValue={startepoch} />
 							<input type="submit" />
 							<p className="error">{this.state.errorForm1}</p>
 						</form>

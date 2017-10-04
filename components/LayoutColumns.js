@@ -5,11 +5,13 @@ import Menu from './Menu'
 
 export default class extends React.Component {
 	render() {
+		const { isLoggedIn, middleColumn, children } = this.props
+
 		let isChildren = false
-		if (this.props.children) {
-			if (this.props.children.hasOwnProperty('props')) isChildren = true
+		if (children) {
+			if (children.hasOwnProperty('props')) isChildren = true
 			else {
-				this.props.children.forEach(c => {
+				children.forEach(c => {
 					isChildren = isChildren || !!c
 				})
 			}
@@ -20,7 +22,7 @@ export default class extends React.Component {
 				<div className="inner">
 					{isChildren ? (
 						<div className="column third">
-							{this.props.middleColumn ? (
+							{middleColumn ? (
 								<Link href="/" prefetch>
 									<a className="desktop-hidden">&lt; PROPOSALS</a>
 								</Link>
@@ -29,21 +31,21 @@ export default class extends React.Component {
 									<a className="desktop-hidden">&lt; MENU</a>
 								</Link>
 							)}
-							{this.props.children}
+							{children}
 						</div>
 					) : null}
 
-					{this.props.middleColumn ? (
+					{middleColumn ? (
 						<div className="column second">
 							<Link href="/menu" prefetch>
 								<a className="desktop-hidden">&lt; MENU</a>
 							</Link>
-							{this.props.middleColumn}
+							{middleColumn}
 						</div>
 					) : null}
 
 					<div className="column first">
-						<Menu />
+						<Menu isLoggedIn={isLoggedIn} />
 					</div>
 				</div>
 				<style jsx>{`
