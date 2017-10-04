@@ -1,4 +1,3 @@
-import config from '../config'
 import React from 'react'
 import Paper from './Paper'
 
@@ -21,7 +20,7 @@ export default class extends React.Component {
 						<p>Abstain: {proposal.FundingResult.AbstainCount}</p>
 					</div>
 					<h3 className={proposal.isEnoughBudget ? 'green' : 'red'}>
-						{extraData.payment_amount} {config.ticker}
+						{extraData.payment_amount} {process.env.TICKER}
 					</h3>
 					<p>Starting {startDate}</p>
 					<a target="_blank" href={extraData.url}>

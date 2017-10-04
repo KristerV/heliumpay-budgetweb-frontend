@@ -1,10 +1,9 @@
 import Head from 'next/head'
-import config from '../config'
 
 export default () => (
 	<div>
 		<Head>
-			<title>{config.site.title}</title>
+			<title>{process.env.SITE_TITLE}</title>
 			<meta charSet="utf-8" />
 			<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 		</Head>

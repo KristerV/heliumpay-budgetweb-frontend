@@ -1,7 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
 import Paper from './Paper'
-import config from '../config'
 
 export default class extends React.Component {
 	render() {
@@ -22,7 +21,7 @@ export default class extends React.Component {
 								<p>{proposal.name}</p>
 								<p className="light">
 									{Math.round(proposal.payment_amount * 100) / 100}{' '}
-									{config.ticker}
+									{process.env.TICKER}
 								</p>
 							</div>
 						</div>

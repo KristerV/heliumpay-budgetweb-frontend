@@ -1,13 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
-import config from '../config'
 import ApiClient from '../utils/ApiClient'
 import * as cookieUtils from '../utils/cookieUtils'
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
 import Alert from '../components/Alert'
 
-const client = new ApiClient(config.apiUrl)
+const client = new ApiClient(process.env.API_URL)
 
 export default class ForgotPassword extends React.Component {
 	state = {
@@ -17,7 +16,7 @@ export default class ForgotPassword extends React.Component {
 	}
 
 	static async getInitialProps(ctx) {
-		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
+		const client = new ApiClient(process.env.API_URL, cookieUtils.getToken(ctx))
 		return {
 			isLoggedIn: client.isLoggedIn()
 		}

@@ -1,5 +1,4 @@
 import React from 'react'
-import config from '../config'
 import * as cookieUtils from '../utils/cookieUtils'
 import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
@@ -20,14 +19,14 @@ export default class ConfirmEmail extends React.Component {
 			// use the provided token and user id to confirm the users email
 			// then redirect to itself without the query parameters
 			try {
-				client = new ApiClient(config.apiUrl, token)
+				client = new ApiClient(process.env.API_URL, token)
 				await client.confirmEmail(userId)
 				ctx.res.redirect('/confirmEmail')
 			} catch (err) {
 				ctx.res.redirect(`/confirmEmail?error=${err.message}`)
 			}
 		} else {
-			client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
+			client = new ApiClient(process.env.API_URL, cookieUtils.getToken(ctx))
 		}
 
 		return {

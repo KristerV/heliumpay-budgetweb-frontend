@@ -2,7 +2,6 @@ import React from 'react'
 import moment from 'moment'
 import Bitcore from 'bitcore-lib-dash'
 import NoScript from 'react-noscript'
-import config from '../config'
 import * as cookieUtils from '../utils/cookieUtils'
 import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
@@ -16,7 +15,7 @@ export default class Submit extends React.Component {
 	}
 
 	static async getInitialProps(ctx) {
-		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
+		const client = new ApiClient(process.env.API_URL, cookieUtils.getToken(ctx))
 		return {
 			isLoggedIn: client.isLoggedIn(),
 			startepoch: moment().unix(),
@@ -142,7 +141,7 @@ export default class Submit extends React.Component {
 									</tr>
 									<tr>
 										<td>
-											<label>Payment address ({config.ticker})</label>
+											<label>Payment address ({process.env.TICKER})</label>
 										</td>
 										<td>
 											<input
@@ -156,7 +155,7 @@ export default class Submit extends React.Component {
 									</tr>
 									<tr>
 										<td>
-											<label>Payment amount ({config.ticker})</label>
+											<label>Payment amount ({process.env.TICKER})</label>
 										</td>
 										<td>
 											<input id="payment_amount" placeholder="Amount" />
@@ -180,7 +179,7 @@ export default class Submit extends React.Component {
 						<form onSubmit={this.createSubmitCommand}>
 							<p>
 								Paste this command into your wallet debug console. You need to have
-								5 {config.ticker} on your account.
+								5 {process.env.TICKER} on your account.
 							</p>
 							<p className="copyBox">{this.state.prepCommand}</p>
 							<p>Paste the resulting transaction ID below.</p>

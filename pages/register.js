@@ -1,14 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
 import router from 'next/router'
-import config from '../config'
 import * as cookieUtils from '../utils/cookieUtils'
 import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
 import Alert from '../components/Alert'
 
-const client = new ApiClient(config.apiUrl)
+const client = new ApiClient(process.env.API_URL)
 
 export default class Register extends React.Component {
 	state = {
@@ -20,7 +19,7 @@ export default class Register extends React.Component {
 	}
 
 	static async getInitialProps(ctx) {
-		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
+		const client = new ApiClient(process.env.API_URL, cookieUtils.getToken(ctx))
 		return {
 			isLoggedIn: client.isLoggedIn(),
 			query: ctx.query

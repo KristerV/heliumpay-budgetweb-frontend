@@ -1,7 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
 import router from 'next/router'
-import config from '../config'
 import * as cookieUtils from '../utils/cookieUtils'
 import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
@@ -17,7 +16,7 @@ export default class Login extends React.Component {
 
 	static async getInitialProps(ctx) {
 		const { userId, token } = ctx.query
-		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
+		const client = new ApiClient(process.env.API_URL, cookieUtils.getToken(ctx))
 		return {
 			isLoggedIn: client.isLoggedIn(),
 			userId,
@@ -40,7 +39,7 @@ export default class Login extends React.Component {
 		} else {
 			try {
 				// uses reset token to change password
-				const client = new ApiClient(config.apiUrl, token)
+				const client = new ApiClient(process.env.API_URL, token)
 				const user = await client.resetPassword(userId, password)
 				// create and sets new user token
 				const userToken = await client.login(user.username, password)

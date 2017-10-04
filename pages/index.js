@@ -1,7 +1,6 @@
 import React from 'react'
 import 'isomorphic-fetch'
 
-import config from '../config'
 import * as cookieUtils from '../utils/cookieUtils'
 import ApiClient from '../utils/ApiClient'
 import LayoutColumns from '../components/LayoutColumns'
@@ -12,17 +11,17 @@ export default class Proposals extends React.Component {
 	state = {}
 
 	static async getInitialProps(ctx) {
-		const client = new ApiClient(config.apiUrl, cookieUtils.getToken(ctx))
+		const client = new ApiClient(process.env.API_URL, cookieUtils.getToken(ctx))
 		let errors = []
 
-		const proposalsResult = await fetch(config.apiUrl + '/v0/core/proposals?status=active')
+		const proposalsResult = await fetch(process.env.API_URL + '/v0/core/proposals?status=active')
 		let proposals = await proposalsResult.json()
 		if (proposalsResult.status !== 200) {
 			errors.push(proposals.message)
 			proposals = []
 		}
 
-		const budgetResult = await fetch(config.apiUrl + '/v0/core/budget')
+		const budgetResult = await fetch(process.env.API_URL + '/v0/core/budget')
 		let budget = await budgetResult.json()
 		if (budgetResult.status !== 200) {
 			errors.push(budget.message)
@@ -32,7 +31,7 @@ export default class Proposals extends React.Component {
 		let proposal = {}
 		if (ctx.query.proposal) {
 			const proposalResult = await fetch(
-				config.apiUrl + '/v0/core/proposals/' + ctx.query.proposal
+				process.env.API_URL + '/v0/core/proposals/' + ctx.query.proposal
 			)
 			proposal = await proposalResult.json()
 			if (proposalResult.status !== 200) {
@@ -57,7 +56,7 @@ export default class Proposals extends React.Component {
 				<p>There are {proposals.length} active proposals (not counting closed).</p>
 				<p>
 					Next payment will be {Math.round(budget.budgetTotal * 100) / 100}{' '}
-					{config.ticker} and it will occur in{' '}
+					{process.env.TICKER} and it will occur in{' '}
 					{Math.round(budget.paymentDelay / 60 / 60 / 24)} days (however there are only{' '}
 					{Math.round(budget.voteDeadlineDelay / 60 / 60 / 24)} days to vote).
 				</p>
