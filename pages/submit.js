@@ -115,6 +115,16 @@ export default class Submit extends React.Component {
 					</NoScript>
 
 					<Paper>
+						<h2>Introduction</h2>
+						<p>There's a few things to keep in mind when doing this:</p>
+						<ol>
+							<li><b>Don't refresh this page after Step 1</b> or you'll get stuck.</li>
+							<li>There is no discussion features here yet, so open a topic in the <a target="_blank" href="https://forum.heliumlabs.org">forum</a> and post that link.</li>
+							<li>If you get stuck best place to ask is #budgetproposals channel in Slack or forum.</li>
+						</ol>
+					</Paper>
+
+					<Paper>
 						<h2>Step 1 - Insert info</h2>
 						<form onSubmit={this.createPrepareCommand}>
 							<table>
