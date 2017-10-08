@@ -32,15 +32,19 @@ export default class ApiClient {
 	}
 
 	async makeRequest(method, endpoint, body) {
-		const response = await fetch(`${this.baseUrl}/v0/${endpoint}`, {
-			method,
-			headers: {
-				Accept: 'application/json, text/plain, */*',
-				'Content-Type': 'application/json',
-				...(this.token ? { Authorization: `Bearer ${this.token}` } : {})
-			},
-			body: JSON.stringify(body)
-		})
+		try {
+			const response = await fetch(`${this.baseUrl}/v0/${endpoint}`, {
+				method,
+				headers: {
+					Accept: 'application/json, text/plain, */*',
+					'Content-Type': 'application/json',
+					...(this.token ? { Authorization: `Bearer ${this.token}` } : {})
+				},
+				body: JSON.stringify(body)
+			})
+		} catch(e) {
+			throw new Error(e)
+		}
 
 		if (response.ok) {
 			const data = await response.json()
