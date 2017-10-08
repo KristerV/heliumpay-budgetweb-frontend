@@ -142,7 +142,7 @@ export default class Submit extends React.Component {
 									</tr>
 									<tr>
 										<td>
-											<label>Link for more info</label>
+											<label><a target="_blank" href="https://forum.heliumlabs.org">Forum</a> link</label>
 										</td>
 										<td>
 											<input id="url" placeholder="Description URL" />
