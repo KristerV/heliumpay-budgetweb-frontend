@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import * as cookieUtils from '../utils/cookieUtils'
+import features from '../features'
 
 export default ({ isLoggedIn }) => (
 	<div className="container">
@@ -16,21 +17,26 @@ export default ({ isLoggedIn }) => (
 			</li>
 			{isLoggedIn ? (
 				<li>
-					<Link href="/" prefetch>
-						<div>
-							<a href="javascript:;" onClick={cookieUtils.remove}>
-								Logout
-							</a>
-						</div>
-					</Link>
+					{features.login ?
+						<Link href="/" prefetch>
+							<div>
+								<a href="javascript:;" onClick={cookieUtils.remove}>
+									Logout
+								</a>
+							</div>
+						</Link>
+					: null}
 				</li>
 			) : (
 				<li>
-					<Link href="/login" prefetch>
-						<a>Login / Register</a>
-					</Link>
+					{features.login ?
+						<Link href="/login" prefetch>
+							<a>Login / Register</a>
+						</Link>
+					: null}
 				</li>
 			)}
+
 		</ul>
 		<style jsx>{`
 			.container {
