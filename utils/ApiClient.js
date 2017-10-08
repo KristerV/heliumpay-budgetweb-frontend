@@ -1,3 +1,5 @@
+import 'isomorphic-fetch'
+
 export default class ApiClient {
 	constructor(baseUrl, token) {
 		this.baseUrl = baseUrl

@@ -8,20 +8,22 @@ import LayoutColumns from '../components/LayoutColumns'
 import Paper from '../components/Paper'
 
 export default class Submit extends React.Component {
+	
 	state = {
 		errorForm1: null,
 		prepCommand: 'Command will appear here',
-		submitCommand: 'Command will appear here'
+		submitCommand: 'Command will appear here',
+		start_epoch_select: null,
+		end_epoch_select: 1,
+		payment_amount: 0,
 	}
 
 	static async getInitialProps(ctx) {
 		const client = new ApiClient(process.env.API_URL, cookieUtils.getToken(ctx))
 		return {
 			isLoggedIn: client.isLoggedIn(),
-			startepoch: moment().unix(),
-			endepoch: moment()
-				.add(2, 'months')
-				.unix()
+			budget: await client.makeRequest('GET', 'core/budget/'),
+			submit_date: moment().unix()
 		}
 	}
 
@@ -48,11 +50,13 @@ export default class Submit extends React.Component {
 			dataSerialized = proposal.serialize()
 		} catch (e) {
 			this.setState({ errorForm1: e.message })
+			return
 		}
-		if (!dataSerialized) return
+		this.setState({errorForm1: null})
 
 		const prepCommand = `gobject prepare ${form.parenthash.value} ${form.revision.value} ${form
 			.time.value} ${dataSerialized}`
+
 		this.setState({ prepCommand, proposal, dataSerialized })
 	}
 
@@ -66,8 +70,36 @@ export default class Submit extends React.Component {
 		this.setState({ submitCommand })
 	}
 
+	setFormValue = prop => e => {
+		this.setState({ [prop]: e.target.value })
+	}
+
 	render() {
-		const { isLoggedIn, startepoch, endepoch } = this.props
+		const { isLoggedIn, submit_date, budget } = this.props
+		const { start_epoch_select, end_epoch_select, payment_amount } = this.state
+
+		const startOptions = []
+		for (let i = 0; i < 6; i++) {
+			startOptions.push({
+				label: moment(budget.paymentDate).add(i*28, 'days').format("DD MMMM YYYY"),
+				value: moment(budget.paymentDate).add(i*28, 'days').unix()
+			})
+		}
+
+		const endOptions = []
+		const paymentsCountMax = 12
+		for (let i = 1; i <= paymentsCountMax; i++) {
+			endOptions.push(<option key={i} value={i}>{i} times</option>)
+		}
+
+		const payment_count = parseInt(end_epoch_select)
+		const first_payment_exact = start_epoch_select
+		const last_payment_exact = moment(first_payment_exact*1000).add((payment_count-1)*28, 'days').unix()
+
+		const start_epoch = moment(first_payment_exact*1000).subtract(15, 'days').unix()
+		const end_epoch = moment(last_payment_exact*1000).add(15, 'days').unix()
+		const lastPayment = moment(last_payment_exact*1000).format("DD MMMM YYYY")
+		const totalAmount = payment_amount * payment_count
 
 		return (
 			<LayoutColumns isLoggedIn={isLoggedIn}>
@@ -95,7 +127,7 @@ export default class Submit extends React.Component {
 											<input id="name" placeholder="Proposal name (40char)" />
 										</td>
 										<td>
-											<i>(40 char max)</i>
+											<i>(40 char max and no spaces)</i>
 										</td>
 									</tr>
 									<tr>
@@ -111,32 +143,30 @@ export default class Submit extends React.Component {
 									</tr>
 									<tr>
 										<td>
-											<label>Start datetime</label>
+											<label>First payment</label>
 										</td>
 										<td>
-											<input
-												id="start_epoch"
-												defaultValue={startepoch}
-												placeholder="Start epoch"
-											/>
-										</td>
-										<td>
-											<i>(In unix timestamp)</i>
+											<select id="start_epoch_select" onChange={this.setFormValue('start_epoch_select')}>
+												<option defaultValue=""></option>
+												{startOptions.map((item, i) => {
+													return <option key={i} value={item.value}>{item.label}</option>
+												})}
+											</select>
+											<input className="hidden" value={start_epoch} id="start_epoch" readOnly/>
 										</td>
 									</tr>
 									<tr>
 										<td>
-											<label>End datetime</label>
+											<label>Payments count</label>
 										</td>
 										<td>
-											<input
-												id="end_epoch"
-												placeholder="End epoch"
-												defaultValue={endepoch}
-											/>
+											<select id="end_epoch_select" onChange={this.setFormValue('end_epoch_select')}>
+												{endOptions}
+											</select>
+											<input className="hidden" value={end_epoch} id="end_epoch" readOnly/>
 										</td>
 										<td>
-											<i>(In unix timestamp)</i>
+											<i>(In monthly installments)</i>
 										</td>
 									</tr>
 									<tr>
@@ -158,7 +188,12 @@ export default class Submit extends React.Component {
 											<label>Payment amount ({process.env.TICKER})</label>
 										</td>
 										<td>
-											<input id="payment_amount" placeholder="Amount" />
+											<input 
+												id="payment_amount"
+												placeholder="Amount"
+												defaultValue={payment_amount}
+												onChange={this.setFormValue('payment_amount')}
+											/>
 										</td>
 										<td>
 											<i />
@@ -166,12 +201,18 @@ export default class Submit extends React.Component {
 									</tr>
 								</tbody>
 							</table>
+							{totalAmount ? 
+								<p>That is a total of {totalAmount} {process.env.TICKER} with last payment on {lastPayment}.</p>
+							: null}
 							<input id="type" className="hidden" defaultValue="1" />
 							<input id="parenthash" className="hidden" defaultValue="0" />
 							<input id="revision" className="hidden" defaultValue="1" />
-							<input id="time" className="hidden" defaultValue={startepoch} />
+							<input id="time" className="hidden" defaultValue={submit_date} />
 							<input type="submit" />
 							<p className="error">{this.state.errorForm1}</p>
+							{this.state.prepCommand ?
+								<p>Great! Continue to step 2.</p>
+							: null}
 						</form>
 					</Paper>
 					<Paper>
@@ -185,6 +226,9 @@ export default class Submit extends React.Component {
 							<p>Paste the resulting transaction ID below.</p>
 							<input id="txid" placeholder="Prepare command result" />
 							<input type="submit" />
+							{this.state.submitCommand ?
+								<p>Seems legit. Continue to step 3.</p>
+							: null}
 						</form>
 					</Paper>
 					<Paper>
